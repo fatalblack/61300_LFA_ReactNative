@@ -3,19 +3,22 @@ import { StyleSheet, Text, View } from 'react-native';
 function Header() {
   return(
     <View style={stylesHeader.container}>
-      <Text>Aquí irá el header de la tienda</Text>
+      <Text style={stylesHeader.brand}>Maggie Asian Shop</Text>
     </View>
   );
 }
     
 const stylesHeader = StyleSheet.create({
   container: {
-    backgroundColor: '#cceeff',
-    alignItems: 'left',
-    justifyContent: 'center',
     height: 100,
-    padding: 10
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#cceeff',
   },
+  brand: {
+    fontSize: 24,
+  }
 });
 
 export default Header;
