@@ -1,13 +1,25 @@
 import { StyleSheet, TextInput, View, Pressable, Text } from 'react-native';
+import { useState } from 'react';
 
-function ItemForm({callback}) {
+function ItemForm({callbackAddItem}) {
+  const [itemTitle, setItemTitle] = useState("");
+
+  const onAddItemPress = () =>{
+    callbackAddItem(itemTitle);
+    setItemTitle("");
+  };
+
   return(
     <View style={stylesItemForm.container}>
       <View style={stylesItemForm.col1}>
-        <TextInput style={stylesItemForm.input} placeholder='Producto'></TextInput>
+        <TextInput
+          style={stylesItemForm.input}
+          placeholder='Producto'
+          onChangeText={(text) => setItemTitle(text)}
+          value={itemTitle}></TextInput>
       </View>
       <View style={stylesItemForm.col2}>
-        <Pressable style={stylesItemForm.button}>
+        <Pressable style={stylesItemForm.button} onPress={onAddItemPress}>
           <Text style={stylesItemForm.buttonText}>+</Text>
         </Pressable>
       </View>
@@ -46,10 +58,10 @@ const stylesItemForm = StyleSheet.create({
     alignItems: 'center',
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
-    backgroundColor: 'cornflowerblue',
+    backgroundColor: '#6495ed',
   },
   buttonText: {
-    color: 'white',
+    color: '#fff',
     fontWeight: '600',
     fontSize: 18,
   }
