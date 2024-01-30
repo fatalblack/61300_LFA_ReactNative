@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, StatusBar } from 'react-native';
 import { useState } from 'react';
 import Header from './src/components/Header';
 import ItemForm from './src/components/items/ItemForm';
@@ -18,6 +18,7 @@ export default function App() {
 
   return (
     <View style={stylesApp.container}>
+      <StatusBar/>
       <Header></Header>
       <ItemForm callbackAddItem={addItem}></ItemForm>
       <ItemList list={list} callbackDeleteItem={deleteItem}></ItemList>

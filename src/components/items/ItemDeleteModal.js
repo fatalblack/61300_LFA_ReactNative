@@ -15,19 +15,21 @@ function ItemDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
       style={stylesItemRow.modal}
       transparent={true}
     >
-      <View style={stylesItemRow.modalBody}>
-        <View>
-          <Text style={stylesItemRow.modalDetail}>
-            ¿Desea eliminar el producto '{itemTitle}'?
-          </Text>
-        </View>
-        <View style={stylesItemRow.modalActions}>
-          <Pressable onPress={onDelete} style={stylesItemRow.modalDeleteButton}>
-            <Text style={stylesItemRow.modalDeleteButtonText}>Eliminar</Text>
-          </Pressable>
-          <Pressable onPress={onCancel} style={stylesItemRow.modalCancelButton}>
-            <Text style={stylesItemRow.modalCancelButtonText}>Cancelar</Text>
-          </Pressable>
+      <View style={stylesItemRow.modalContainer}>
+        <View style={stylesItemRow.modalBody}>
+          <View>
+            <Text style={stylesItemRow.modalDetail}>
+              ¿Desea eliminar el producto '{itemTitle}'?
+            </Text>
+          </View>
+          <View style={stylesItemRow.modalActions}>
+            <Pressable onPress={onDelete} style={stylesItemRow.modalDeleteButton}>
+              <Text style={stylesItemRow.modalDeleteButtonText}>Eliminar</Text>
+            </Pressable>
+            <Pressable onPress={onCancel} style={stylesItemRow.modalCancelButton}>
+              <Text style={stylesItemRow.modalCancelButtonText}>Cancelar</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </Modal>
@@ -39,7 +41,13 @@ const stylesItemRow = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'center'
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   modalBody: {
     margin: 10,
