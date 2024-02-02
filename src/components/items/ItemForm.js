@@ -1,5 +1,6 @@
 import { StyleSheet, TextInput, View, Pressable, Text } from 'react-native';
 import { useState } from 'react';
+import { Colors } from '../../globals/styles/Colors';
 
 function ItemForm({callbackAddItem}) {
   const [itemTitle, setItemTitle] = useState("");
@@ -46,9 +47,9 @@ const stylesItemForm = StyleSheet.create({
     padding: 3,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
-    color: '#333',
+    color: Colors.grayDark,
     borderWidth: 1,
-    borderColor: '#333',    
+    borderColor: Colors.grayDark,
     fontSize: 18,
     fontWeight: '400'
   },
@@ -58,10 +59,10 @@ const stylesItemForm = StyleSheet.create({
     alignItems: 'center',
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
-    backgroundColor: '#6495ed',
+    backgroundColor: Colors.blueAlter,
   },
   buttonText: {
-    color: '#fff',
+    color: Colors.white,
     fontWeight: '600',
     fontSize: 18,
   }

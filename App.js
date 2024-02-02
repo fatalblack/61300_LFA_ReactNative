@@ -16,10 +16,14 @@ export default function App() {
     setList(old => old.filter((item) => item.id !== itemId));
   };
 
+  const changeCategory = (categoryId) => {
+    console.log(categoryId);
+  };
+
   return (
     <View style={stylesApp.container}>
       <StatusBar/>
-      <Header></Header>
+      <Header callbackSelectCategory={changeCategory}></Header>
       <ItemForm callbackAddItem={addItem}></ItemForm>
       <ItemList list={list} callbackDeleteItem={deleteItem}></ItemList>
     </View>

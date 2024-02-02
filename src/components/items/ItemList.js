@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import ItemRow from './ItemRow';
+import { Colors } from '../../globals/styles/Colors';
 
 function ItemList({list, callbackDeleteItem}) {
   return(
@@ -22,19 +23,10 @@ const stylesItemList = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'top',
     padding: 5,
-    borderTopColor: '#bbb',
+    borderTopColor: Colors.grayLight,
     borderTopWidth: 1,
-    borderBottomColor: '#bbb',
+    borderBottomColor: Colors.grayLight,
     borderBottomWidth: 1,
-  },
-  item: {
-    marginTop: 2,
-    marginBottom: 2,
-    padding: 2,
-    color: '#333',
-    backgroundColor: '#fcd1c9',
-    fontSize: 18,
-    fontWeight: '600'
   },
   emptyLabel: {
     textAlign: 'center',

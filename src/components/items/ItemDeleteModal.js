@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Pressable, Modal } from 'react-native';
+import { Colors } from '../../globals/styles/Colors';
 
 function ItemDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
   const onDelete = () => {
@@ -12,22 +13,22 @@ function ItemDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
   return(
     <Modal
       visible={visible}
-      style={stylesItemRow.modal}
+      style={stylesItemDeleteModal.modal}
       transparent={true}
     >
-      <View style={stylesItemRow.modalContainer}>
-        <View style={stylesItemRow.modalBody}>
+      <View style={stylesItemDeleteModal.modalContainer}>
+        <View style={stylesItemDeleteModal.modalBody}>
           <View>
-            <Text style={stylesItemRow.modalDetail}>
+            <Text style={stylesItemDeleteModal.modalDetail}>
               ¿Desea eliminar el producto '{itemTitle}'?
             </Text>
           </View>
-          <View style={stylesItemRow.modalActions}>
-            <Pressable onPress={onDelete} style={stylesItemRow.modalDeleteButton}>
-              <Text style={stylesItemRow.modalDeleteButtonText}>Eliminar</Text>
+          <View style={stylesItemDeleteModal.modalActions}>
+            <Pressable onPress={onDelete} style={stylesItemDeleteModal.modalDeleteButton}>
+              <Text style={stylesItemDeleteModal.modalDeleteButtonText}>Eliminar</Text>
             </Pressable>
-            <Pressable onPress={onCancel} style={stylesItemRow.modalCancelButton}>
-              <Text style={stylesItemRow.modalCancelButtonText}>Cancelar</Text>
+            <Pressable onPress={onCancel} style={stylesItemDeleteModal.modalCancelButton}>
+              <Text style={stylesItemDeleteModal.modalCancelButtonText}>Cancelar</Text>
             </Pressable>
           </View>
         </View>
@@ -36,7 +37,7 @@ function ItemDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
   );
 }
 
-const stylesItemRow = StyleSheet.create({
+const stylesItemDeleteModal = StyleSheet.create({
   modal: {
     flex: 1,
     flexDirection: 'column',
@@ -45,17 +46,17 @@ const stylesItemRow = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: Colors.black40,
     alignItems: 'center',
     justifyContent: 'center'
   },
   modalBody: {
     margin: 10,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: Colors.black,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -82,7 +83,7 @@ const stylesItemRow = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 3,
-    backgroundColor: '#f08080',
+    backgroundColor: Colors.redAlert,
   },
   modalDeleteButtonText: {
     fontWeight: '600',
@@ -95,7 +96,7 @@ const stylesItemRow = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 3,
-    backgroundColor: '#bbb',
+    backgroundColor: Colors.grayLight,
   },
   modalCancelButtonText: {
     fontWeight: '600',

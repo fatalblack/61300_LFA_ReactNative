@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, Pressable, Modal } from 'react-native';
 import { useState } from 'react';
 import ItemDeleteModal from './ItemDeleteModal';
 import iconDelete from '../../../assets/icon-delete.png';
+import { Colors } from '../../globals/styles/Colors';
 
 function ItemRow({item, callbackDeleteItem}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -48,10 +49,10 @@ const stylesItemRow = StyleSheet.create({
     flex: 0,
     marginVertical: 2,
     padding: 4,
-    backgroundColor: '#fcd1c9',
+    backgroundColor: Colors.pinkMain,
   },
   text: {
-    color: '#333',
+    color: Colors.grayDark,
     fontSize: 18,
     fontWeight: '600'
   },
@@ -62,8 +63,8 @@ const stylesItemRow = StyleSheet.create({
     width: '20%',
   },
   icon: {
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 24,
     alignSelf: 'flex-end',
   },
 });
