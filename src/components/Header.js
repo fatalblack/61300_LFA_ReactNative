@@ -1,15 +1,26 @@
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import React, { useState } from 'react';
 import { Colors } from '../globals/styles/Colors';
 import CategoryList from './categories/CategoryList';
 import iconBars from '../../assets/icon-bars.png';
-import { useState } from 'react';
+import iconCart from '../../assets/icon-cart.png';
 
-function Header({callbackSelectCategory}) {
+function Header({callbackSelectCategory, callbackGoToCart}) {
   const [visibleList, setVisibleList] = useState(false);
   
   const visibleListTrigger = () => {
     setVisibleList(!visibleList);
   }
+
+  const onSelectCategory = (id) => {
+    setVisibleList(false);
+    callbackSelectCategory(id);
+  };
+
+  const onGoToCart = () => {
+    setVisibleList(false);
+    callbackGoToCart();
+  };
 
   return(
     <View style={stylesHeader.container}>
@@ -24,11 +35,15 @@ function Header({callbackSelectCategory}) {
             <Text style={stylesHeader.brandText}>Maggie Asian Shop</Text>
           </View>
         </View>
-        <View style={stylesHeader.sideColumn}></View>
+        <View style={stylesHeader.sideColumn}>
+          <Pressable onPress={onGoToCart}>
+            <Image source={iconCart} style={stylesHeader.icon} />
+          </Pressable>
+        </View>
       </View>
       {
         visibleList ?
-          <CategoryList callbackSelectCategory={callbackSelectCategory} visibleList={visibleList}></CategoryList> :
+          <CategoryList callbackSelectCategory={onSelectCategory} visibleList={visibleList}></CategoryList> :
           <></>
       }
       
@@ -60,7 +75,8 @@ const stylesHeader = StyleSheet.create({
     justifyContent: 'center',
   },
   brandText: {
-    fontSize: 24,
+    fontSize: 28,
+    fontFamily: 'Lobster'
   },
   icon: {
     width: 30,

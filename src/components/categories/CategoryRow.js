@@ -36,14 +36,15 @@ const stylesCategoryRow = StyleSheet.create({
   },
   text: {
     color: Colors.grayDark,
-    fontSize: 18,
-    fontWeight: '600'
+    lineHeight: 24,
+    fontSize: 22,
+    fontFamily: 'JosefinBold'
   },
   col1: {
-    width: '20%'
+    width: '15%'
   },
   col2: {
-    width: '80%',
+    width: '85%',
   },
   icon: {
     width: 24,

@@ -1,6 +1,8 @@
-import { StyleSheet, TextInput, View, Pressable, Text } from 'react-native';
+import { StyleSheet, TextInput, View, Pressable, Image } from 'react-native';
 import { useState } from 'react';
 import { Colors } from '../../globals/styles/Colors';
+import iconAdd from '../../../assets/icon-add.png';
+import iconCancel from '../../../assets/icon-cancel.png';
 
 function ItemForm({callbackAddItem}) {
   const [itemTitle, setItemTitle] = useState("");
@@ -10,19 +12,29 @@ function ItemForm({callbackAddItem}) {
     setItemTitle("");
   };
 
+  const onCleanPress = () =>{
+    setItemTitle("");
+  };
+
   return(
     <View style={stylesItemForm.container}>
       <View style={stylesItemForm.col1}>
         <TextInput
           style={stylesItemForm.input}
           placeholder='Producto'
+          placeholderTextColor={Colors.grayWhite}
           onChangeText={(text) => setItemTitle(text)}
           value={itemTitle}></TextInput>
       </View>
       <View style={stylesItemForm.col2}>
-        <Pressable style={stylesItemForm.button} onPress={onAddItemPress}>
-          <Text style={stylesItemForm.buttonText}>+</Text>
-        </Pressable>
+        <View style={stylesItemForm.button}>
+          <Pressable onPress={onAddItemPress}>
+            <Image source={iconAdd} style={stylesItemForm.icon} />
+          </Pressable>
+          <Pressable onPress={onCleanPress}>
+            <Image source={iconCancel} style={stylesItemForm.icon} />
+          </Pressable>
+        </View>
       </View>
     </View>
   );
@@ -47,25 +59,29 @@ const stylesItemForm = StyleSheet.create({
     padding: 3,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
-    color: Colors.grayDark,
+    color: Colors.white,
     borderWidth: 1,
-    borderColor: Colors.grayDark,
-    fontSize: 18,
+    borderColor: Colors.blueAlter,
+    backgroundColor: Colors.blueAlter,
+    fontSize: 20,
     fontWeight: '400'
   },
   button: {
     height: 37,
-    justifyContent: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
-    backgroundColor: Colors.blueAlter,
+    borderColor: Colors.blueAlter,
+    borderWidth: 2
   },
-  buttonText: {
-    color: Colors.white,
-    fontWeight: '600',
-    fontSize: 18,
-  }
+  icon: {
+    width: 24,
+    height: 24,
+    alignSelf: 'flex-end',
+  },
 });
 
 export default ItemForm;

@@ -69,7 +69,8 @@ const stylesItemDeleteModal = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 5,
     textAlign: 'center',
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: 'PlayFair'
   },
   modalActions: {
     flexDirection: 'row',
@@ -87,7 +88,7 @@ const stylesItemDeleteModal = StyleSheet.create({
   },
   modalDeleteButtonText: {
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: 20,
   },
   modalCancelButton: {
     height: 35,
@@ -100,7 +101,7 @@ const stylesItemDeleteModal = StyleSheet.create({
   },
   modalCancelButtonText: {
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: 20,
   },
 });
 

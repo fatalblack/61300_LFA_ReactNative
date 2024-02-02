@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Pressable, Modal } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import { useState } from 'react';
 import ItemDeleteModal from './ItemDeleteModal';
 import iconDelete from '../../../assets/icon-delete.png';
@@ -49,12 +49,13 @@ const stylesItemRow = StyleSheet.create({
     flex: 0,
     marginVertical: 2,
     padding: 4,
-    backgroundColor: Colors.pinkMain,
+    backgroundColor: Colors.pinkAlter,
+    borderRadius: 5
   },
   text: {
     color: Colors.grayDark,
-    fontSize: 18,
-    fontWeight: '600'
+    fontSize: 20,
+    fontFamily: 'PlayFairBold'
   },
   col1: {
     width: '80%'
