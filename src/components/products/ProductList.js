@@ -30,6 +30,7 @@ function ProductList({categoryId, callbackAddProduct}) {
 
   return(
     <View style={stylesProductList.container}>
+      <Text style={stylesProductList.title}>{currentCategory?.title}</Text>
       <ProductForm callbackSearchProduct={callbackSearchProduct} lastSearch={searchText}></ProductForm>
       { list.length > 0 ?
         <FlatList
@@ -59,6 +60,13 @@ const stylesProductList = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontStyle: 'italic'
+  },
+  title: {
+    marginBottom: 10,
+    textAlign: 'center',
+    fontSize: 24,
+    fontFamily: 'JosefinBold',
+    color: Colors.black
   }
 });
 
