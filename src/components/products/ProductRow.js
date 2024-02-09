@@ -4,15 +4,15 @@ import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 import iconAdd from '../../../assets/icon-add.png';
 import iconDetail from '../../../assets/icon-detail.png';
 
-function ProductRow({item, callbackAddProduct, callbackSelectedProduct}) {
+function ProductRow({navigation, item}) {
   const { height, width } = useWindowDimensions();
 
   const onAddProduct = () => {
-    callbackAddProduct(item.id);
+    console.log(item.id);
   };
 
   const onViewDetail = () => {
-    callbackSelectedProduct(item);
+    navigation.navigate("ProductDetail", { item: item });
   };
 
   return(

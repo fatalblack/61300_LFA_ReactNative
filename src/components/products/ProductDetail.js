@@ -1,13 +1,14 @@
 import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions, ScrollView } from 'react-native';
-import { useEffect, useState } from 'react/cjs/react.development';
+import { useEffect, useState } from 'react';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 
-function ProductDetail({item, callbackAddProduct, callbackBackToList}) {
+function ProductDetail({navigation, route}) {
   const { height, width } = useWindowDimensions();
   const [ isLandscape, setIsLandscape ] = useState(false);
   const [ imageHeight, setImageHeight ] = useState(0);
   const [ imageWidth, setImageWidth ] = useState(0);
+  const { item } = route.params;
 
   useEffect(()=>{
     if(width > height){
@@ -23,11 +24,11 @@ function ProductDetail({item, callbackAddProduct, callbackBackToList}) {
   }, [height, width]);
 
   const onAddProduct = () => {
-    callbackAddProduct(item.id);
+    console.log(item.id);
   };
 
   const onBackToList = () => {
-    callbackBackToList();
+    navigation.navigate("ProductList", {categoryId: item.categoryId});
   };
 
   return(

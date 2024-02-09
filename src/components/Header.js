@@ -6,7 +6,7 @@ import CategoryList from './categories/CategoryList';
 import iconBars from '../../assets/icon-bars.png';
 import iconCart from '../../assets/icon-cart.png';
 
-function Header({callbackSelectCategory, callbackGoToCart}) {
+function Header({navigation}) {
   const [visibleList, setVisibleList] = useState(false);
   const { height, width } = useWindowDimensions();
   
@@ -14,14 +14,12 @@ function Header({callbackSelectCategory, callbackGoToCart}) {
     setVisibleList(!visibleList);
   }
 
-  const onSelectCategory = (id) => {
-    setVisibleList(false);
-    callbackSelectCategory(id);
+  const onGoToCart = () => {
+    navigation.navigate("Cart");
   };
 
-  const onGoToCart = () => {
+  const callbackHideMenu = () => {
     setVisibleList(false);
-    callbackGoToCart();
   };
 
   return(
@@ -45,10 +43,11 @@ function Header({callbackSelectCategory, callbackGoToCart}) {
       </View>
       {
         visibleList ?
-          <CategoryList callbackSelectCategory={onSelectCategory} visibleList={visibleList}></CategoryList> :
+          <CategoryList
+            navigation={navigation}
+            callbackHideMenu={callbackHideMenu}></CategoryList> :
           <></>
       }
-      
     </View>
   );
 }

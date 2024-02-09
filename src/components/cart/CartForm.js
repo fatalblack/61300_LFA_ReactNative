@@ -5,7 +5,7 @@ import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 import iconAdd from '../../../assets/icon-add.png';
 import iconCancel from '../../../assets/icon-cancel.png';
 
-function ItemForm({callbackAddItem}) {
+function CartForm({callbackAddItem}) {
   const [itemTitle, setItemTitle] = useState("");
   const { height, width } = useWindowDimensions();
 
@@ -19,22 +19,22 @@ function ItemForm({callbackAddItem}) {
   };
 
   return(
-    <View style={stylesItemForm.container}>
-      <View style={stylesItemForm.col1}>
+    <View style={stylesCartForm.container}>
+      <View style={stylesCartForm.col1}>
         <TextInput
-          style={width < DisplaySizes.minWidth ? stylesItemForm.inputMin : stylesItemForm.input}
+          style={width < DisplaySizes.minWidth ? stylesCartForm.inputMin : stylesCartForm.input}
           placeholder='Producto'
           placeholderTextColor={Colors.grayWhite}
           onChangeText={(text) => setItemTitle(text)}
           value={itemTitle}></TextInput>
       </View>
-      <View style={stylesItemForm.col2}>
-        <View style={stylesItemForm.button}>
+      <View style={stylesCartForm.col2}>
+        <View style={stylesCartForm.button}>
           <Pressable onPress={onAddItemPress}>
-            <Image source={iconAdd} style={width < DisplaySizes.minWidth ? stylesItemForm.iconMin : stylesItemForm.icon} />
+            <Image source={iconAdd} style={width < DisplaySizes.minWidth ? stylesCartForm.iconMin : stylesCartForm.icon} />
           </Pressable>
           <Pressable onPress={onCleanPress}>
-            <Image source={iconCancel} style={width < DisplaySizes.minWidth ? stylesItemForm.iconMin : stylesItemForm.icon} />
+            <Image source={iconCancel} style={width < DisplaySizes.minWidth ? stylesCartForm.iconMin : stylesCartForm.icon} />
           </Pressable>
         </View>
       </View>
@@ -42,7 +42,7 @@ function ItemForm({callbackAddItem}) {
   );
 }
 
-const stylesItemForm = StyleSheet.create({
+const stylesCartForm = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -103,4 +103,4 @@ const stylesItemForm = StyleSheet.create({
   },
 });
 
-export default ItemForm;
+export default CartForm;

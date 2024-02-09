@@ -5,7 +5,7 @@ import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 import { CategoryData } from '../../globals/data/CategoryData';
 import CategoryRow from './CategoryRow';
 
-function CategoryList({callbackSelectCategory, visibleList}) {
+function CategoryList({navigation, callbackHideMenu}) {
   const [list, setList] = useState(CategoryData);
   const { height, width } = useWindowDimensions();
 
@@ -14,7 +14,10 @@ function CategoryList({callbackSelectCategory, visibleList}) {
       { list.length > 0 ?
         <FlatList 
           data={list}
-          renderItem={({item}) => <CategoryRow item={item} callbackSelectCategory={callbackSelectCategory} />}
+          renderItem={({item}) => <CategoryRow
+            item={item}
+            navigation={navigation}
+            callbackHideMenu={callbackHideMenu} />}
           keyExtractor={item => item.id}
         /> :
         <Text style={stylesCategoryList.emptyLabel}>No hay categorías disponibles</Text>

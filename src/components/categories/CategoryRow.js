@@ -2,10 +2,12 @@ import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'r
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 
-function CategoryRow({item, callbackSelectCategory}) {
+function CategoryRow({navigation, item, callbackHideMenu}) {
   const { height, width } = useWindowDimensions();
+  
   const onSelectCategory = () => {
-    callbackSelectCategory(item.id);
+    callbackHideMenu();
+    navigation.navigate("ProductList", {categoryId: item.id});
   };
 
   return(

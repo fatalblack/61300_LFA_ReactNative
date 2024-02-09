@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Pressable, Modal, useWindowDimensions } from 'r
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 
-function ItemDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
+function CartDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
   const { height, width } = useWindowDimensions();
 
   const onDelete = () => {
@@ -16,24 +16,24 @@ function ItemDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
   return(
     <Modal
       visible={visible}
-      style={stylesItemDeleteModal.modal}
+      style={stylesCartDeleteModal.modal}
       transparent={true}
     >
-      <View style={stylesItemDeleteModal.modalContainer}>
-        <View style={stylesItemDeleteModal.modalBody}>
+      <View style={stylesCartDeleteModal.modalContainer}>
+        <View style={stylesCartDeleteModal.modalBody}>
           <View>
-            <Text style={width < DisplaySizes.minWidth ? stylesItemDeleteModal.modalDetailMin : stylesItemDeleteModal.modalDetail}>
+            <Text style={width < DisplaySizes.minWidth ? stylesCartDeleteModal.modalDetailMin : stylesCartDeleteModal.modalDetail}>
               ¿Desea eliminar el producto '{itemTitle}'?
             </Text>
           </View>
-          <View style={stylesItemDeleteModal.modalActions}>
-            <Pressable onPress={onDelete} style={stylesItemDeleteModal.modalDeleteButton}>
-              <Text style={width < DisplaySizes.minWidth ? stylesItemDeleteModal.modalDeleteButtonTextMin : stylesItemDeleteModal.modalDeleteButtonText}>
+          <View style={stylesCartDeleteModal.modalActions}>
+            <Pressable onPress={onDelete} style={stylesCartDeleteModal.modalDeleteButton}>
+              <Text style={width < DisplaySizes.minWidth ? stylesCartDeleteModal.modalDeleteButtonTextMin : stylesCartDeleteModal.modalDeleteButtonText}>
                 Eliminar
               </Text>
             </Pressable>
-            <Pressable onPress={onCancel} style={stylesItemDeleteModal.modalCancelButton}>
-              <Text style={width < DisplaySizes.minWidth ? stylesItemDeleteModal.modalCancelButtonTextMin : stylesItemDeleteModal.modalCancelButtonText}>
+            <Pressable onPress={onCancel} style={stylesCartDeleteModal.modalCancelButton}>
+              <Text style={width < DisplaySizes.minWidth ? stylesCartDeleteModal.modalCancelButtonTextMin : stylesCartDeleteModal.modalCancelButtonText}>
                 Cancelar
               </Text>
             </Pressable>
@@ -44,7 +44,7 @@ function ItemDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
   );
 }
 
-const stylesItemDeleteModal = StyleSheet.create({
+const stylesCartDeleteModal = StyleSheet.create({
   modal: {
     flex: 1,
     flexDirection: 'column',
@@ -127,4 +127,4 @@ const stylesItemDeleteModal = StyleSheet.create({
   },
 });
 
-export default ItemDeleteModal;
+export default CartDeleteModal;

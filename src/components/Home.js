@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { DisplaySizes } from '../globals/styles/DisplaySizes';
 
-function Home(){
+function Home({navigation}){
   const { height, width } = useWindowDimensions();
 
   return(
-      <View style={styleHome.container}>
-          <Text style={width < DisplaySizes.minWidth ? styleHome.textWelcomeMin : styleHome.textWelcome}>Bienvenido a Maggie Asian Shop</Text>
-          <Text style={width < DisplaySizes.minWidth ? styleHome.textMin : styleHome.text}>Seleccione una categoría de productos del menú o controle su compra en el carrito.</Text>
-      </View>
+    <View style={styleHome.container}>
+      <Text style={width < DisplaySizes.minWidth ? styleHome.textWelcomeMin : styleHome.textWelcome}>Bienvenido a Maggie Asian Shop</Text>
+      <Text style={width < DisplaySizes.minWidth ? styleHome.textMin : styleHome.text}>Seleccione una categoría de productos del menú o controle su compra en el carrito.</Text>
+    </View>
   );
 }
 

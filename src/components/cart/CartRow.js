@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
 import { useState } from 'react';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
-import ItemDeleteModal from './ItemDeleteModal';
-import iconDelete from '../../../assets/icon-delete.png';
 import { Colors } from '../../globals/styles/Colors';
+import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import CartDeleteModal from './CartDeleteModal';
+import iconDelete from '../../../assets/icon-delete.png';
 
-function ItemRow({item, callbackDeleteItem}) {
+function CartRow({item, callbackDeleteItem}) {
   const [modalVisible, setModalVisible] = useState(false);
   const { height, width } = useWindowDimensions();
 
@@ -23,18 +23,18 @@ function ItemRow({item, callbackDeleteItem}) {
   };
 
   return(
-    <View style={stylesItemRow.container}>
-      <View style={stylesItemRow.col1}>
-        <Text style={width < DisplaySizes.minWidth ? stylesItemRow.textMin : stylesItemRow.text}>
+    <View style={stylesCartRow.container}>
+      <View style={stylesCartRow.col1}>
+        <Text style={width < DisplaySizes.minWidth ? stylesCartRow.textMin : stylesCartRow.text}>
           {item.title}
         </Text>
       </View>
-      <View style={stylesItemRow.col2}>
+      <View style={stylesCartRow.col2}>
         <Pressable onPress={onOpenDeleteModal}>
-          <Image source={iconDelete} style={width < DisplaySizes.minWidth ? stylesItemRow.iconMin : stylesItemRow.icon} />
+          <Image source={iconDelete} style={width < DisplaySizes.minWidth ? stylesCartRow.iconMin : stylesCartRow.icon} />
         </Pressable>
       </View>
-      <ItemDeleteModal
+      <CartDeleteModal
         itemTitle={item.title}
         visible={modalVisible}
         callbackDelete={onDeleteAndCloseModal}
@@ -43,7 +43,7 @@ function ItemRow({item, callbackDeleteItem}) {
   );
 }
 
-const stylesItemRow = StyleSheet.create({
+const stylesCartRow = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -82,4 +82,4 @@ const stylesItemRow = StyleSheet.create({
   },
 });
 
-export default ItemRow;
+export default CartRow;

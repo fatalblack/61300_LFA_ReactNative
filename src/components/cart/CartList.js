@@ -1,23 +1,23 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import ItemRow from './ItemRow';
 import { Colors } from '../../globals/styles/Colors';
+import CartRow from './CartRow';
 
-function ItemList({list, callbackDeleteItem}) {
+function CartList({list, callbackDeleteItem}) {
   return(
-    <View style={stylesItemList.container}>
+    <View style={stylesCartList.container}>
       { list.length > 0 ?
         <FlatList
           data={list}
-          renderItem={({item}) => <ItemRow item={item} callbackDeleteItem={callbackDeleteItem} />}
+          renderItem={({item}) => <CartRow item={item} callbackDeleteItem={callbackDeleteItem} />}
           keyExtractor={item => item.id}
         /> :
-        <Text style={stylesItemList.emptyLabel}>Agregue productos</Text>
+        <Text style={stylesCartList.emptyLabel}>Agregue productos</Text>
       }
     </View>
   );
 }
 
-const stylesItemList = StyleSheet.create({
+const stylesCartList = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -35,4 +35,4 @@ const stylesItemList = StyleSheet.create({
   }
 });
 
-export default ItemList;
+export default CartList;

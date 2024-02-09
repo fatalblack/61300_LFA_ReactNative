@@ -6,19 +6,17 @@ import { CategoryData } from '../../globals/data/CategoryData';
 import { ProductData } from '../../globals/data/ProductData';
 import ProductRow from './ProductRow';
 import ProductForm from './ProductForm';
-import ProductDetail from './ProductDetail';
 
-function ProductList({categoryId, callbackAddProduct}) {
+function ProductList({navigation, route}) {
   const [list, setList] = useState([]);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [searchText, setSearchText] = useState("");
   const { height, width } = useWindowDimensions();
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const {categoryId} = route.params;
 
   useEffect(() => {
     if(categoryId != null){
       setSearchText("");
-      callbackBackToList();
     }
   },[categoryId]);
 
@@ -33,32 +31,24 @@ function ProductList({categoryId, callbackAddProduct}) {
     setSearchText(text);
   };
 
-  const callbackSelectedProduct = (product) => {
-    setSelectedProduct(product);
-  };
-
-  const callbackBackToList = () => {
-    setSelectedProduct(null);
-  };
-
   return(
-    selectedProduct == null ?
-      <View style={stylesProductList.container}>
-        <Text style={width < DisplaySizes.minWidth ? stylesProductList.titleMin : stylesProductList.title}>
-          {currentCategory?.title}
-        </Text>
-        <ProductForm callbackSearchProduct={callbackSearchProduct} lastSearch={searchText}></ProductForm>
-        { list.length > 0 ?
-          <FlatList
-            data={list}
-            renderItem={({item}) => <ProductRow item={item} callbackAddProduct={callbackAddProduct} callbackSelectedProduct={callbackSelectedProduct} />}
-            keyExtractor={item => item.id}
-          />
-          :
-          <Text style={stylesProductList.emptyLabel}>No se encontraron productos en {currentCategory?.title} </Text>
-        }
-      </View>
-    : <ProductDetail item={selectedProduct} callbackAddProduct={callbackAddProduct} callbackBackToList={callbackBackToList}></ProductDetail>
+    <View style={stylesProductList.container}>
+      <Text style={width < DisplaySizes.minWidth ? stylesProductList.titleMin : stylesProductList.title}>
+        {currentCategory?.title}
+      </Text>
+      <ProductForm callbackSearchProduct={callbackSearchProduct} lastSearch={searchText}></ProductForm>
+      { list.length > 0 ?
+        <FlatList
+          data={list}
+          renderItem={({item}) => <ProductRow
+            item={item}
+            navigation={navigation} />}
+          keyExtractor={item => item.id}
+        />
+        :
+        <Text style={stylesProductList.emptyLabel}>No se encontraron productos en {currentCategory?.title} </Text>
+      }
+    </View>
   );
 }
 
