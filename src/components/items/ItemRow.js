@@ -1,11 +1,13 @@
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
 import { useState } from 'react';
+import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 import ItemDeleteModal from './ItemDeleteModal';
 import iconDelete from '../../../assets/icon-delete.png';
 import { Colors } from '../../globals/styles/Colors';
 
 function ItemRow({item, callbackDeleteItem}) {
   const [modalVisible, setModalVisible] = useState(false);
+  const { height, width } = useWindowDimensions();
 
   const onOpenDeleteModal = () => {
     setModalVisible(true);
@@ -23,13 +25,13 @@ function ItemRow({item, callbackDeleteItem}) {
   return(
     <View style={stylesItemRow.container}>
       <View style={stylesItemRow.col1}>
-        <Text style={stylesItemRow.text}>
+        <Text style={width < DisplaySizes.minWidth ? stylesItemRow.textMin : stylesItemRow.text}>
           {item.title}
         </Text>
       </View>
       <View style={stylesItemRow.col2}>
         <Pressable onPress={onOpenDeleteModal}>
-          <Image source={iconDelete} style={stylesItemRow.icon} />
+          <Image source={iconDelete} style={width < DisplaySizes.minWidth ? stylesItemRow.iconMin : stylesItemRow.icon} />
         </Pressable>
       </View>
       <ItemDeleteModal
@@ -57,6 +59,11 @@ const stylesItemRow = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'PlayFairBold'
   },
+  textMin: {
+    color: Colors.grayDark,
+    fontSize: 16,
+    fontFamily: 'PlayFairBold'
+  },
   col1: {
     width: '80%'
   },
@@ -66,6 +73,11 @@ const stylesItemRow = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+    alignSelf: 'flex-end',
+  },
+  iconMin: {
+    width: 20,
+    height: 20,
     alignSelf: 'flex-end',
   },
 });

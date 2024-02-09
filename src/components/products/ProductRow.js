@@ -1,36 +1,39 @@
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
 import { Colors } from '../../globals/styles/Colors';
+import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 import iconAdd from '../../../assets/icon-add.png';
 import iconDetail from '../../../assets/icon-detail.png';
 
-function ProductRow({item, callbackAddProduct}) {
+function ProductRow({item, callbackAddProduct, callbackSelectedProduct}) {
+  const { height, width } = useWindowDimensions();
+
   const onAddProduct = () => {
     callbackAddProduct(item.id);
   };
 
   const onViewDetail = () => {
-    
+    callbackSelectedProduct(item);
   };
 
   return(
     <View style={stylesProductRow.container}>
-      <View style={stylesProductRow.colImage}>
+      <View style={width < DisplaySizes.minWidth ? stylesProductRow.colImageMin : stylesProductRow.colImage}>
         <Image source={item.image} style={stylesProductRow.image} resizeMode='cover' />
       </View>
-      <View style={stylesProductRow.colDescription}>
-        <Text style={stylesProductRow.text}>
+      <View style={width < DisplaySizes.minWidth ? stylesProductRow.colDescriptionMin : stylesProductRow.colDescription}>
+        <Text style={width < DisplaySizes.minWidth ? stylesProductRow.textMin : stylesProductRow.text}>
           {item.title}
         </Text>
-        <Text style={stylesProductRow.textPrice}>
+        <Text style={width < DisplaySizes.minWidth ? stylesProductRow.textPriceMin : stylesProductRow.textPrice}>
           ${item.price}
         </Text>
       </View>
       <View style={stylesProductRow.colActions}>
         <Pressable onPress={onViewDetail}>
-          <Image source={iconDetail} style={stylesProductRow.icon} />
+          <Image source={iconDetail} style={width < DisplaySizes.minWidth ? stylesProductRow.iconMin : stylesProductRow.icon} />
         </Pressable>
         <Pressable onPress={onAddProduct}>
-          <Image source={iconAdd} style={stylesProductRow.icon} />
+          <Image source={iconAdd} style={width < DisplaySizes.minWidth ? stylesProductRow.iconMin : stylesProductRow.icon} />
         </Pressable>
       </View>
     </View>
@@ -53,16 +56,33 @@ const stylesProductRow = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'PlayFairBold'
   },
+  textMin: {
+    color: Colors.grayDark,
+    fontSize: 16,
+    fontFamily: 'PlayFairBold'
+  },
   textPrice: {
     color: Colors.grayDark,
     fontSize: 20,
     fontFamily: 'PlayFairBold'
   },
+  textPriceMin: {
+    color: Colors.grayDark,
+    fontSize: 16,
+    fontFamily: 'PlayFairBold'
+  },
   colImage: {
     width: '25%'
   },
+  colImageMin: {
+    width: '20%'
+  },
   colDescription: {
     width: '55%',
+    paddingHorizontal: 4
+  },
+  colDescriptionMin: {
+    width: '60%',
     paddingHorizontal: 4
   },
   colActions: {
@@ -74,6 +94,11 @@ const stylesProductRow = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+    alignSelf: 'flex-end',
+  },
+  iconMin: {
+    width: 20,
+    height: 20,
     alignSelf: 'flex-end',
   },
   image: {

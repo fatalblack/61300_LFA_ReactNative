@@ -19,14 +19,14 @@ function ItemList({list, callbackDeleteItem}) {
 
 const stylesItemList = StyleSheet.create({
   container: {
-    flex: 0,
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'top',
     padding: 5,
     borderTopColor: Colors.grayLight,
     borderTopWidth: 1,
     borderBottomColor: Colors.grayLight,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
   },
   emptyLabel: {
     textAlign: 'center',

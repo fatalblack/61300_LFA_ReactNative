@@ -1,7 +1,10 @@
-import { StyleSheet, Text, View, Pressable, Modal } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Modal, useWindowDimensions } from 'react-native';
 import { Colors } from '../../globals/styles/Colors';
+import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 
 function ItemDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
+  const { height, width } = useWindowDimensions();
+
   const onDelete = () => {
     callbackDelete();
   }
@@ -19,16 +22,20 @@ function ItemDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
       <View style={stylesItemDeleteModal.modalContainer}>
         <View style={stylesItemDeleteModal.modalBody}>
           <View>
-            <Text style={stylesItemDeleteModal.modalDetail}>
+            <Text style={width < DisplaySizes.minWidth ? stylesItemDeleteModal.modalDetailMin : stylesItemDeleteModal.modalDetail}>
               ¿Desea eliminar el producto '{itemTitle}'?
             </Text>
           </View>
           <View style={stylesItemDeleteModal.modalActions}>
             <Pressable onPress={onDelete} style={stylesItemDeleteModal.modalDeleteButton}>
-              <Text style={stylesItemDeleteModal.modalDeleteButtonText}>Eliminar</Text>
+              <Text style={width < DisplaySizes.minWidth ? stylesItemDeleteModal.modalDeleteButtonTextMin : stylesItemDeleteModal.modalDeleteButtonText}>
+                Eliminar
+              </Text>
             </Pressable>
             <Pressable onPress={onCancel} style={stylesItemDeleteModal.modalCancelButton}>
-              <Text style={stylesItemDeleteModal.modalCancelButtonText}>Cancelar</Text>
+              <Text style={width < DisplaySizes.minWidth ? stylesItemDeleteModal.modalCancelButtonTextMin : stylesItemDeleteModal.modalCancelButtonText}>
+                Cancelar
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -72,6 +79,13 @@ const stylesItemDeleteModal = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'PlayFair'
   },
+  modalDetailMin: {
+    paddingVertical: 15,
+    paddingHorizontal: 3,
+    textAlign: 'center',
+    fontSize: 17,
+    fontFamily: 'PlayFair'
+  },
   modalActions: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -90,6 +104,10 @@ const stylesItemDeleteModal = StyleSheet.create({
     fontWeight: '600',
     fontSize: 20,
   },
+  modalDeleteButtonTextMin: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   modalCancelButton: {
     height: 35,
     padding: 5,
@@ -102,6 +120,10 @@ const stylesItemDeleteModal = StyleSheet.create({
   modalCancelButtonText: {
     fontWeight: '600',
     fontSize: 20,
+  },
+  modalCancelButtonTextMin: {
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 

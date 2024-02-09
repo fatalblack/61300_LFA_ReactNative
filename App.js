@@ -1,4 +1,4 @@
-import { StyleSheet, View, StatusBar } from 'react-native';
+import { StyleSheet, View, StatusBar, SafeAreaView, Platform } from 'react-native';
 import { useState } from 'react';
 import { useFonts } from 'expo-font';
 import { Fonts } from './src/globals/styles/Fonts';
@@ -56,7 +56,7 @@ export default function App() {
   };
 
   return (
-    <View style={stylesApp.container}>
+    <SafeAreaView style={stylesApp.container}>
       <StatusBar/>
       <Header callbackSelectCategory={changeCategory} callbackGoToCart={goToCart}></Header>
       {
@@ -77,7 +77,7 @@ export default function App() {
           <ProductList categoryId={currentCategoryId} callbackAddProduct={callbackAddProduct}></ProductList> :
           <></>
       }
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -86,6 +86,7 @@ const stylesApp = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'top',
-    justifyContent: 'top'
-  }
+    justifyContent: 'top',
+    paddingTop: Platform.OS !== 'android' ? StatusBar.currentHeight : 0 
+  },
 });

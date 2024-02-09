@@ -1,19 +1,21 @@
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
 import { Colors } from '../../globals/styles/Colors';
+import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 
 function CategoryRow({item, callbackSelectCategory}) {
+  const { height, width } = useWindowDimensions();
   const onSelectCategory = () => {
     callbackSelectCategory(item.id);
   };
 
   return(
     <Pressable onPress={onSelectCategory}>
-      <View style={stylesCategoryRow.container}>
+      <View style={width < DisplaySizes.minWidth ? stylesCategoryRow.containerMin : stylesCategoryRow.container}>
         <View style={stylesCategoryRow.col1}>
-          <Image source={item.icon} style={stylesCategoryRow.icon} />
+          <Image source={item.icon} style={width < DisplaySizes.minWidth ? stylesCategoryRow.iconMin : stylesCategoryRow.icon} />
         </View>
         <View style={stylesCategoryRow.col2}>
-          <Text style={stylesCategoryRow.text}>
+          <Text style={width < DisplaySizes.minWidth ? stylesCategoryRow.textMin : stylesCategoryRow.text}>
             {item.title}
           </Text>
         </View>
@@ -34,10 +36,27 @@ const stylesCategoryRow = StyleSheet.create({
     borderColor: Colors.white,
     borderBottomColor: Colors.grayLight
   },
+  containerMin: {
+    height: 26,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 0,
+    marginVertical: 3,
+    padding: 4,
+    borderColor: Colors.white,
+    borderBottomColor: Colors.grayLight
+  },
   text: {
     color: Colors.grayDark,
     lineHeight: 24,
     fontSize: 22,
+    fontFamily: 'JosefinBold'
+  },
+  textMin: {
+    color: Colors.grayDark,
+    lineHeight: 20,
+    fontSize: 18,
     fontFamily: 'JosefinBold'
   },
   col1: {
@@ -49,6 +68,11 @@ const stylesCategoryRow = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+    alignSelf: 'flex-start',
+  },
+  iconMin: {
+    width: 20,
+    height: 20,
     alignSelf: 'flex-start',
   },
 });

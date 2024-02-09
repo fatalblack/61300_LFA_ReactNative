@@ -1,11 +1,13 @@
-import { StyleSheet, TextInput, View, Pressable, Image } from 'react-native';
+import { StyleSheet, TextInput, View, Pressable, Image, useWindowDimensions } from 'react-native';
 import { useState } from 'react';
 import { Colors } from '../../globals/styles/Colors';
+import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 import iconAdd from '../../../assets/icon-add.png';
 import iconCancel from '../../../assets/icon-cancel.png';
 
 function ItemForm({callbackAddItem}) {
   const [itemTitle, setItemTitle] = useState("");
+  const { height, width } = useWindowDimensions();
 
   const onAddItemPress = () =>{
     callbackAddItem(itemTitle);
@@ -20,7 +22,7 @@ function ItemForm({callbackAddItem}) {
     <View style={stylesItemForm.container}>
       <View style={stylesItemForm.col1}>
         <TextInput
-          style={stylesItemForm.input}
+          style={width < DisplaySizes.minWidth ? stylesItemForm.inputMin : stylesItemForm.input}
           placeholder='Producto'
           placeholderTextColor={Colors.grayWhite}
           onChangeText={(text) => setItemTitle(text)}
@@ -29,10 +31,10 @@ function ItemForm({callbackAddItem}) {
       <View style={stylesItemForm.col2}>
         <View style={stylesItemForm.button}>
           <Pressable onPress={onAddItemPress}>
-            <Image source={iconAdd} style={stylesItemForm.icon} />
+            <Image source={iconAdd} style={width < DisplaySizes.minWidth ? stylesItemForm.iconMin : stylesItemForm.icon} />
           </Pressable>
           <Pressable onPress={onCleanPress}>
-            <Image source={iconCancel} style={stylesItemForm.icon} />
+            <Image source={iconCancel} style={width < DisplaySizes.minWidth ? stylesItemForm.iconMin : stylesItemForm.icon} />
           </Pressable>
         </View>
       </View>
@@ -66,6 +68,18 @@ const stylesItemForm = StyleSheet.create({
     fontSize: 20,
     fontWeight: '400'
   },
+  inputMin: {
+    height: 33,
+    padding: 3,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    color: Colors.white,
+    borderWidth: 1,
+    borderColor: Colors.blueAlter,
+    backgroundColor: Colors.blueAlter,
+    fontSize: 18,
+    fontWeight: '400'
+  },
   button: {
     height: 37,
     flex: 1,
@@ -80,6 +94,11 @@ const stylesItemForm = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+    alignSelf: 'flex-end',
+  },
+  iconMin: {
+    width: 22,
+    height: 22,
     alignSelf: 'flex-end',
   },
 });
