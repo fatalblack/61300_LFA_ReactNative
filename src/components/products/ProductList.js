@@ -57,11 +57,13 @@ const stylesProductList = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'top',
-    padding: 5,
+    paddingHorizontal: 5,
+    paddingTop: 5,
+    paddingBottom: DisplaySizes.paddingBottomNavigator,
     borderTopColor: Colors.grayLight,
     borderTopWidth: 1,
     borderBottomColor: Colors.grayLight,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
   },
   emptyLabel: {
     textAlign: 'center',

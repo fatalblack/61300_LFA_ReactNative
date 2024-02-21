@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, useWindowDimensions } from 'react-native';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
-import { CartData } from '../../globals/data/CartData';
-import CartList from './CartList';
+import { OrderData } from '../../globals/data/OrderData';
+import OrderList from './OrderList';
 
-function Cart({navigation}){
+function Order({navigation}){
   const { height, width } = useWindowDimensions();
-  const [list, setList] = useState(CartData);
-  const [currentIndex, setCurrentIndex] = useState(1);
+  const [list, setList] = useState(OrderData);
   const [total, setTotal] = useState(0);
   const [ isLandscape, setIsLandscape ] = useState(false);
 
@@ -20,30 +19,20 @@ function Cart({navigation}){
   }, [height, width]);
   
   useEffect(() => {
-    setTotal(0);
-    list.map(item => setTotal(old => item.subTotal + old));
+    setTotal(list.length);
   },[list]);
 
-  const callbackAddItem = (itemTitle) => {
-    setList(old => [...old, {id: currentIndex, title: itemTitle}]);
-    setCurrentIndex(currentIndex + 1);
-  };
-  const callbackDeleteItem = (itemId) => {
-    setList(old => old.filter((item) => item.id !== itemId));
-    setItemsSubTotal(old => old.filter((item) => item.id !== itemId));
-  };
-
   return(
-    <View style={isLandscape ? stylesCart.containerLandscape : stylesCart.container}>
-      <CartList list={list} callbackDeleteItem={callbackDeleteItem}></CartList>
+    <View style={isLandscape ? stylesOrder.containerLandscape : stylesOrder.container}>
+      <OrderList list={list} navigation={navigation}></OrderList>
       <View>
-        <Text style={stylesCart.total}>Total ${total}</Text>
+        <Text style={stylesOrder.total}>{total} compras</Text>
       </View>
     </View>
   );
 }
 
-const stylesCart = StyleSheet.create({
+const stylesOrder = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -66,4 +55,4 @@ const stylesCart = StyleSheet.create({
   }
 });
 
-export default Cart;
+export default Order;

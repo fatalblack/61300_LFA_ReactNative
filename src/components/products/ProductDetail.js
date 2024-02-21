@@ -77,6 +77,7 @@ const stylesProductDetail = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     flex: 1,
+    paddingBottom: DisplaySizes.paddingBottomNavigator,
   },
   zoneBack:{
     width: '100%'

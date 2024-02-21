@@ -1,8 +1,7 @@
 import { StyleSheet, StatusBar, SafeAreaView, Platform } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Fonts } from './src/globals/styles/Fonts';
-import Navigator from './src/navigation/Navigator';
-import Home from './src/components/Home';
+import TabNavigator from './src/navigation/TabNavigator';
 
 export default function App() {
   const [fontsLoaded] = useFonts(Fonts);
@@ -14,7 +13,7 @@ export default function App() {
   return (
     <SafeAreaView style={stylesApp.container}>
       <StatusBar/>
-      <Navigator/>
+      <TabNavigator/>
     </SafeAreaView>
   );
 }
@@ -25,6 +24,6 @@ const stylesApp = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'top',
     justifyContent: 'top',
-    paddingTop: Platform.OS !== 'android' ? StatusBar.currentHeight : 0 
+    paddingTop: Platform.OS !== 'android' ? StatusBar.currentHeight : 0
   },
 });

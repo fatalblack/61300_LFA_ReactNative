@@ -24,18 +24,24 @@ function CartRow({item, callbackDeleteItem}) {
 
   return(
     <View style={stylesCartRow.container}>
-      <View style={stylesCartRow.col1}>
+      <View style={width < DisplaySizes.minWidth ? stylesCartRow.colImageMin : stylesCartRow.colImage}>
+        <Image source={item.product.image} style={stylesCartRow.image} resizeMode='cover' />
+      </View>
+      <View style={width < DisplaySizes.minWidth ? stylesCartRow.colDescriptionMin : stylesCartRow.colDescription}>
         <Text style={width < DisplaySizes.minWidth ? stylesCartRow.textMin : stylesCartRow.text}>
-          {item.title}
+          {item.product.title}
+        </Text>
+        <Text style={width < DisplaySizes.minWidth ? stylesCartRow.textPriceMin : stylesCartRow.textPrice}>
+          ${item.subTotal} (${item.product.price} x {item.quantity})
         </Text>
       </View>
-      <View style={stylesCartRow.col2}>
+      <View style={stylesCartRow.colActions}>
         <Pressable onPress={onOpenDeleteModal}>
           <Image source={iconDelete} style={width < DisplaySizes.minWidth ? stylesCartRow.iconMin : stylesCartRow.icon} />
         </Pressable>
       </View>
       <CartDeleteModal
-        itemTitle={item.title}
+        itemTitle={item.product.title}
         visible={modalVisible}
         callbackDelete={onDeleteAndCloseModal}
         callbackCancel={onCloseModal} />
@@ -64,11 +70,35 @@ const stylesCartRow = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'PlayFairBold'
   },
-  col1: {
-    width: '80%'
+  textPrice: {
+    color: Colors.grayDark,
+    fontSize: 20,
+    fontFamily: 'PlayFairBold'
   },
-  col2: {
+  textPriceMin: {
+    color: Colors.grayDark,
+    fontSize: 16,
+    fontFamily: 'PlayFairBold'
+  },
+  colImage: {
+    width: '25%'
+  },
+  colImageMin: {
+    width: '20%'
+  },
+  colDescription: {
+    width: '55%',
+    paddingHorizontal: 4
+  },
+  colDescriptionMin: {
+    width: '60%',
+    paddingHorizontal: 4
+  },
+  colActions: {
     width: '20%',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around'
   },
   icon: {
     width: 24,
@@ -80,6 +110,12 @@ const stylesCartRow = StyleSheet.create({
     height: 20,
     alignSelf: 'flex-end',
   },
+  image: {
+    flex: 1,
+    width: 'auto',
+    height: 'auto',
+    borderRadius: 5
+  }
 });
 
 export default CartRow;

@@ -17,7 +17,8 @@ const styleHome = StyleSheet.create({
       flex: 1,
       padding: 10,
       alignItems: 'center',
-      justifyContent: 'flex-start'
+      justifyContent: 'flex-start',
+      paddingBottom: DisplaySizes.paddingBottomNavigator
     },
     textWelcome: {
       width: '100%',

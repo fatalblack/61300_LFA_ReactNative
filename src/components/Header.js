@@ -4,7 +4,6 @@ import { Colors } from '../globals/styles/Colors';
 import { DisplaySizes } from '../globals/styles/DisplaySizes';
 import CategoryList from './categories/CategoryList';
 import iconBars from '../../assets/icon-bars.png';
-import iconCart from '../../assets/icon-cart.png';
 
 function Header({navigation}) {
   const [visibleList, setVisibleList] = useState(false);
@@ -36,9 +35,7 @@ function Header({navigation}) {
           </View>
         </View>
         <View style={stylesHeader.sideColumn}>
-          <Pressable onPress={onGoToCart}>
-            <Image source={iconCart} style={width < DisplaySizes.minWidth ? stylesHeader.iconMin : stylesHeader.icon} />
-          </Pressable>
+
         </View>
       </View>
       {
