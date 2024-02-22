@@ -1,12 +1,11 @@
-import { useState } from 'react';
 import { StyleSheet, Text, View, FlatList, useWindowDimensions } from 'react-native';
+import { useSelector } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
-import { CategoryData } from '../../globals/data/CategoryData';
 import CategoryRow from './CategoryRow';
 
-function CategoryList({navigation, callbackHideMenu}) {
-  const [list, setList] = useState(CategoryData);
+function CategoryList({navigation}) {
+  const list = useSelector(state => state.shopReducer.value.categories);
   const { height, width } = useWindowDimensions();
 
   return(
@@ -16,8 +15,7 @@ function CategoryList({navigation, callbackHideMenu}) {
           data={list}
           renderItem={({item}) => <CategoryRow
             item={item}
-            navigation={navigation}
-            callbackHideMenu={callbackHideMenu} />}
+            navigation={navigation} />}
           keyExtractor={item => item.id}
         /> :
         <Text style={stylesCategoryList.emptyLabel}>No hay categorías disponibles</Text>

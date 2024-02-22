@@ -12,7 +12,7 @@ export const CartData = [
       id: 2,
       productId: 3,
       quantity: 1,
-      subTotal: ProductData.find(p => p.id == 3).price * 4,
+      subTotal: ProductData.find(p => p.id == 3).price * 1,
       product: ProductData.find(p => p.id == 3),
     },
     {

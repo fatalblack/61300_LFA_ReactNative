@@ -1,11 +1,14 @@
 import { StyleSheet, TextInput, View, Pressable, Text, Image, useWindowDimensions } from 'react-native';
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { setProductSearchText } from '../../features/shop/shopSlice';
 import iconSearch from '../../../assets/icon-search.png';
 import iconCancel from '../../../assets/icon-cancel.png';
 
-function ProductForm({callbackSearchProduct, lastSearch}) {
+function ProductForm({lastSearch}) {
+  const dispatch = useDispatch();
   const [productToSearch, setProductToSearch] = useState(lastSearch);
   const [error, setError] = useState("");
   const { height, width } = useWindowDimensions();
@@ -23,7 +26,7 @@ function ProductForm({callbackSearchProduct, lastSearch}) {
   const onSearchProductPress = () =>{
     if(validateSearchText(productToSearch)){
       setError("");
-      callbackSearchProduct(productToSearch);
+      dispatch(setProductSearchText(productToSearch));
     }else{
       setError("No se admiten números");
     }
@@ -32,7 +35,7 @@ function ProductForm({callbackSearchProduct, lastSearch}) {
   const onCleanPress = () =>{
     setError("");
     setProductToSearch("");
-    callbackSearchProduct("");
+    dispatch(setProductSearchText(""));
   };
 
   return(

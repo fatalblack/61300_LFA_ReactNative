@@ -1,14 +1,17 @@
 import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { addCartItem } from '../../features/shop/shopSlice';
 
-function ProductDetail({navigation, route}) {
+function ProductDetail({navigation}) {
+  const dispatch = useDispatch();
   const { height, width } = useWindowDimensions();
   const [ isLandscape, setIsLandscape ] = useState(false);
   const [ imageHeight, setImageHeight ] = useState(0);
   const [ imageWidth, setImageWidth ] = useState(0);
-  const { item } = route.params;
+  const item = useSelector(state => state.shopReducer.value.products.find(p => p.id === state.shopReducer.value.productIdSelected));
 
   useEffect(()=>{
     if(width > height){
@@ -24,7 +27,7 @@ function ProductDetail({navigation, route}) {
   }, [height, width]);
 
   const onAddProduct = () => {
-    console.log(item.id);
+    dispatch(addCartItem({product: item, quantity: 1}));
   };
 
   const onBackToList = () => {

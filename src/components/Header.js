@@ -1,25 +1,20 @@
 import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../globals/styles/Colors';
 import { DisplaySizes } from '../globals/styles/DisplaySizes';
+import { setShowMenu } from '../features/shop/shopSlice';
 import CategoryList from './categories/CategoryList';
 import iconBars from '../../assets/icon-bars.png';
 
 function Header({navigation}) {
-  const [visibleList, setVisibleList] = useState(false);
+  const dispatch = useDispatch();
+  const showMenu = useSelector(state => state.shopReducer.value.showMenu);
   const { height, width } = useWindowDimensions();
   
   const visibleListTrigger = () => {
-    setVisibleList(!visibleList);
+    dispatch(setShowMenu(!showMenu));
   }
-
-  const onGoToCart = () => {
-    navigation.navigate("Cart");
-  };
-
-  const callbackHideMenu = () => {
-    setVisibleList(false);
-  };
 
   return(
     <View style={stylesHeader.container}>
@@ -39,10 +34,9 @@ function Header({navigation}) {
         </View>
       </View>
       {
-        visibleList ?
+        showMenu ?
           <CategoryList
-            navigation={navigation}
-            callbackHideMenu={callbackHideMenu}></CategoryList> :
+            navigation={navigation}></CategoryList> :
           <></>
       }
     </View>

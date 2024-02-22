@@ -1,16 +1,22 @@
 import { StyleSheet, Text, View, Pressable, Modal, useWindowDimensions } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { deleteCartItem, setProductModalVisible } from '../../features/shop/shopSlice';
 
-function CartDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
+function CartDeleteModal({item}) {
+  const dispatch = useDispatch();
   const { height, width } = useWindowDimensions();
+  const productModalCurrentId = useSelector(state => state.shopReducer.value.productModalCurrentId);
+  const visible = useSelector(state => state.shopReducer.value.productModalVisible) && productModalCurrentId === item.id;
 
   const onDelete = () => {
-    callbackDelete();
+    dispatch(deleteCartItem(item.id));
+    dispatch(setProductModalVisible(false));
   }
 
   const onCancel = () => {
-    callbackCancel();
+    dispatch(setProductModalVisible(false));
   }
 
   return(
@@ -23,7 +29,7 @@ function CartDeleteModal({itemTitle, visible, callbackDelete, callbackCancel}) {
         <View style={stylesCartDeleteModal.modalBody}>
           <View>
             <Text style={width < DisplaySizes.minWidth ? stylesCartDeleteModal.modalDetailMin : stylesCartDeleteModal.modalDetail}>
-              ¿Desea eliminar el producto '{itemTitle}'?
+              ¿Desea eliminar el producto '{item.product.title}'?
             </Text>
           </View>
           <View style={stylesCartDeleteModal.modalActions}>

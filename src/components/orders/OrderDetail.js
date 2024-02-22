@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Pressable, useWindowDimensions } from 'react-native';
+import { useSelector } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 import OrderCartRow from './OrderCartRow';
 
-function OrderDetail({navigation, route}) {
+function OrderDetail({navigation}) {
   const { height, width } = useWindowDimensions();
-  const { item } = route.params;
+  const item = useSelector(state => state.shopReducer.value.orderCartSelected);
   const [ isLandscape, setIsLandscape ] = useState(false);
 
   useEffect(()=>{

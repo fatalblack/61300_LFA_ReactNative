@@ -1,13 +1,17 @@
 import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { setOrderCartSelected } from '../../features/shop/shopSlice';
 import iconDetail from '../../../assets/icon-detail.png';
 
 function OrderRow({item, navigation}) {
+  const dispatch = useDispatch();
   const { height, width } = useWindowDimensions();
   
   const onViewDetail = () => {
-    navigation.navigate("OrderDetail", { item: item });
+    dispatch(setOrderCartSelected(item));
+    navigation.navigate("OrderDetail");
   };
 
   return(

@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, useWindowDimensions } from 'react-native';
+import { useSelector } from 'react-redux';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
-import { OrderData } from '../../globals/data/OrderData';
 import OrderList from './OrderList';
 
 function Order({navigation}){
+  const list = useSelector(state => state.shopReducer.value.orders);
+
   const { height, width } = useWindowDimensions();
-  const [list, setList] = useState(OrderData);
   const [total, setTotal] = useState(0);
   const [ isLandscape, setIsLandscape ] = useState(false);
 

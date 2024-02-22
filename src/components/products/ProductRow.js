@@ -1,18 +1,22 @@
 import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { setProductIdSelected, addCartItem } from '../../features/shop/shopSlice';
 import iconAdd from '../../../assets/icon-add.png';
 import iconDetail from '../../../assets/icon-detail.png';
 
 function ProductRow({navigation, item}) {
+  const dispatch = useDispatch();
   const { height, width } = useWindowDimensions();
 
   const onAddProduct = () => {
-    console.log(item.id);
+    dispatch(addCartItem({product: item, quantity: 1}));
   };
 
   const onViewDetail = () => {
-    navigation.navigate("ProductDetail", { item: item });
+    dispatch(setProductIdSelected(item.id));
+    navigation.navigate("ProductDetail");
   };
 
   return(

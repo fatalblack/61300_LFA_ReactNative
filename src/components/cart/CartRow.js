@@ -1,25 +1,18 @@
 import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
-import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { setProductModalVisible, setProductModalCurrentId } from '../../features/shop/shopSlice';
 import CartDeleteModal from './CartDeleteModal';
 import iconDelete from '../../../assets/icon-delete.png';
 
-function CartRow({item, callbackDeleteItem}) {
-  const [modalVisible, setModalVisible] = useState(false);
+function CartRow({item}) {
+  const dispatch = useDispatch();
   const { height, width } = useWindowDimensions();
 
   const onOpenDeleteModal = () => {
-    setModalVisible(true);
-  };
-
-  const onDeleteAndCloseModal = () => {
-    callbackDeleteItem(item.id);
-    setModalVisible(false);
-  };
-
-  const onCloseModal = () => {
-    setModalVisible(false);
+    dispatch(setProductModalCurrentId(item.id));
+    dispatch(setProductModalVisible(true));
   };
 
   return(
@@ -40,11 +33,7 @@ function CartRow({item, callbackDeleteItem}) {
           <Image source={iconDelete} style={width < DisplaySizes.minWidth ? stylesCartRow.iconMin : stylesCartRow.icon} />
         </Pressable>
       </View>
-      <CartDeleteModal
-        itemTitle={item.product.title}
-        visible={modalVisible}
-        callbackDelete={onDeleteAndCloseModal}
-        callbackCancel={onCloseModal} />
+      <CartDeleteModal item={item} />
     </View>
   );
 }

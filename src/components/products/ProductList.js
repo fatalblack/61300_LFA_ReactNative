@@ -1,42 +1,41 @@
 import { StyleSheet, Text, View, FlatList, useWindowDimensions } from 'react-native';
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
-import { CategoryData } from '../../globals/data/CategoryData';
-import { ProductData } from '../../globals/data/ProductData';
+import { setProductSearchText } from '../../features/shop/shopSlice';
 import ProductRow from './ProductRow';
 import ProductForm from './ProductForm';
 
-function ProductList({navigation, route}) {
+function ProductList({navigation}) {
+  const dispatch = useDispatch();
   const [list, setList] = useState([]);
   const [currentCategory, setCurrentCategory] = useState(null);
-  const [searchText, setSearchText] = useState("");
   const { height, width } = useWindowDimensions();
-  const {categoryId} = route.params;
+  const searchText = useSelector(state => state.shopReducer.value.productSearchText);
+  const categorySelected = useSelector(state => state.shopReducer.value.categorySelected);
+  const categoryId = categorySelected.id;
+  const products = useSelector(state => state.shopReducer.value.products);
 
   useEffect(() => {
     if(categoryId != null){
-      setSearchText("");
+      dispatch(setProductSearchText(""));
     }
   },[categoryId]);
 
   useEffect(() => {
     if(categoryId != null){
-      setCurrentCategory(CategoryData.find(c => c.id == categoryId));
-      setList(ProductData.filter(p => p.categoryId == categoryId && p.title.toLowerCase().includes(searchText.toLowerCase())));
+      setCurrentCategory(categorySelected);
+      setList(products.filter(p => p.categoryId == categoryId && p.title.toLowerCase().includes(searchText.toLowerCase())));
     }
   },[categoryId, searchText]);
-
-  const callbackSearchProduct = (text) => {
-    setSearchText(text);
-  };
 
   return(
     <View style={stylesProductList.container}>
       <Text style={width < DisplaySizes.minWidth ? stylesProductList.titleMin : stylesProductList.title}>
         {currentCategory?.title}
       </Text>
-      <ProductForm callbackSearchProduct={callbackSearchProduct} lastSearch={searchText}></ProductForm>
+      <ProductForm lastSearch={searchText}></ProductForm>
       { list.length > 0 ?
         <FlatList
           data={list}

@@ -1,13 +1,17 @@
 import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { setCategorySelected, setShowMenu } from '../../features/shop/shopSlice';
 
-function CategoryRow({navigation, item, callbackHideMenu}) {
+function CategoryRow({navigation, item}) {
+  const dispatch = useDispatch();
   const { height, width } = useWindowDimensions();
   
   const onSelectCategory = () => {
-    callbackHideMenu();
-    navigation.navigate("ProductList", {categoryId: item.id});
+    dispatch(setShowMenu(false));
+    dispatch(setCategorySelected(item));
+    navigation.navigate("ProductList");
   };
 
   return(

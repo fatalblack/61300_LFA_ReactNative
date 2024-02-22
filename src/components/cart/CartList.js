@@ -2,13 +2,13 @@ import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { Colors } from '../../globals/styles/Colors';
 import CartRow from './CartRow';
 
-function CartList({list, callbackDeleteItem}) {
+function CartList({list}) {
   return(
     <View style={stylesCartList.container}>
       { list.length > 0 ?
         <FlatList
           data={list}
-          renderItem={({item}) => <CartRow item={item} callbackDeleteItem={callbackDeleteItem} />}
+          renderItem={({item}) => <CartRow item={item} />}
           keyExtractor={item => item.id}
         /> :
         <Text style={stylesCartList.emptyLabel}>Agregue productos</Text>
