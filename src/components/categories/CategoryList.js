@@ -1,16 +1,16 @@
 import { StyleSheet, Text, View, FlatList, useWindowDimensions } from 'react-native';
-import { useSelector } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { useGetCategoriesQuery } from '../../services/shopService';
 import CategoryRow from './CategoryRow';
 
 function CategoryList({navigation}) {
-  const list = useSelector(state => state.shopReducer.value.categories);
+  const { data: list, isLoading, error } = useGetCategoriesQuery();
   const { height, width } = useWindowDimensions();
 
   return(
     <View style={width < DisplaySizes.minWidth ? stylesCategoryList.containerMin : stylesCategoryList.container}>
-      { list.length > 0 ?
+      { list && list.length > 0 ?
         <FlatList 
           data={list}
           renderItem={({item}) => <CategoryRow

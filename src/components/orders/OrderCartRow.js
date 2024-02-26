@@ -8,7 +8,7 @@ function OrderCartRow({item}) {
   return(
     <View style={stylesOrderCartRow.container}>
       <View style={width < DisplaySizes.minWidth ? stylesOrderCartRow.colImageMin : stylesOrderCartRow.colImage}>
-        <Image source={item.product.image} style={stylesOrderCartRow.image} resizeMode='cover' />
+        <Image source={{ uri: item.product.image }} style={stylesOrderCartRow.image} resizeMode='cover' />
       </View>
       <View style={width < DisplaySizes.minWidth ? stylesOrderCartRow.colDescriptionMin : stylesOrderCartRow.colDescription}>
         <Text style={width < DisplaySizes.minWidth ? stylesOrderCartRow.textMin : stylesOrderCartRow.text}>

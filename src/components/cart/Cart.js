@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, Text, useWindowDimensions, Pressable } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
-import { refreshCartTotal } from '../../features/shop/shopSlice';
+import { Colors } from '../../globals/styles/Colors';
+import { refreshCartTotal, cleanCart } from '../../features/shop/shopSlice';
+import { usePostOrderMutation } from '../../services/shopService';
 import CartList from './CartList';
 
 function Cart({navigation}){
@@ -11,6 +13,7 @@ function Cart({navigation}){
   const total = useSelector(state => state.shopReducer.value.cartTotal);
   const { height, width } = useWindowDimensions();
   const [ isLandscape, setIsLandscape ] = useState(false);
+  const [triggerPost, result] = usePostOrderMutation();
 
   useEffect(()=>{
     if(width > height){
@@ -24,11 +27,26 @@ function Cart({navigation}){
     dispatch(refreshCartTotal());
   },[]);
 
+  const confirmCart = () => {
+    triggerPost({total, buyCartList: list, date: new Date(), user: 'loggedUser'});
+    dispatch(cleanCart());
+  };
+
   return(
     <View style={isLandscape ? stylesCart.containerLandscape : stylesCart.container}>
       <CartList list={list}></CartList>
-      <View>
-        <Text style={stylesCart.total}>Total ${total}</Text>
+      <View style={stylesCart.row}>
+        <View style={stylesCart.col}>
+          {
+            list.length > 0 ?
+            <Pressable onPress={confirmCart} style={stylesCart.confirmButton}>
+            <Text style={stylesCart.confirmText}>¡Comprar!</Text>
+          </Pressable> :
+          <></>}
+        </View>
+        <View style={stylesCart.col}>
+          <Text style={stylesCart.total}>Total ${total}</Text>
+        </View>
       </View>
     </View>
   );
@@ -51,9 +69,31 @@ const stylesCart = StyleSheet.create({
   },
   total: {
     paddingRight: 5,
+    paddingTop: 10,
     fontSize: 18,
     fontFamily: 'JosefinBold',
     textAlign: 'right'
+  },
+  row: {
+    flex: 0,
+    flexDirection: 'row'
+  },
+  col: {
+    width: '50%'
+  },
+  confirmButton: {
+    height: 36,
+    padding: 5,
+    marginTop: 10,
+    marginLeft: 10,
+    borderRadius: 3,
+    backgroundColor: Colors.pinkMain,
+    alignSelf: 'flex-start'
+  },
+  confirmText: {
+    fontSize: 18,
+    fontFamily: 'JosefinBold',
+    lineHeight: 22
   }
 });
 

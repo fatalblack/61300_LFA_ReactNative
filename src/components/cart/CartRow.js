@@ -18,7 +18,7 @@ function CartRow({item}) {
   return(
     <View style={stylesCartRow.container}>
       <View style={width < DisplaySizes.minWidth ? stylesCartRow.colImageMin : stylesCartRow.colImage}>
-        <Image source={item.product.image} style={stylesCartRow.image} resizeMode='cover' />
+        <Image source={{ uri: item.product.image }} style={stylesCartRow.image} resizeMode='cover' />
       </View>
       <View style={width < DisplaySizes.minWidth ? stylesCartRow.colDescriptionMin : stylesCartRow.colDescription}>
         <Text style={width < DisplaySizes.minWidth ? stylesCartRow.textMin : stylesCartRow.text}>

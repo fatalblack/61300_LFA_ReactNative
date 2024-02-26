@@ -15,10 +15,12 @@ export const shopSlice = createSlice({
   name: 'shop',
   initialState: {
     value: {
-      categories: CategoryData,
-      products: ProductData,
-      orders: OrderData,
-      cartItems: CartData,
+      //categories: CategoryData,
+      //products: ProductData,
+      //orders: OrderData,
+      //cartItems: CartData,
+      orders: [],
+      cartItems: [],
       cartTotal: 0,
       currentCartIndex: 4,
       categorySelected: null,
@@ -51,16 +53,23 @@ export const shopSlice = createSlice({
     addCartItem: (state, action) => {
       let product = action.payload.product;
       let quantity = action.payload.quantity;
-      let productToAdd = {
-        id: state.value.currentCartIndex,
-        productId: product.id,
-        quantity: quantity,
-        subTotal: product.price * quantity,
-        product: product,
-      };
+      let productAlreadyAdded = state.value.cartItems.find(p => p.productId === product.id);
 
-      state.value.cartItems = [...state.value.cartItems, productToAdd];
-      state.value.currentCartIndex++;
+      if(productAlreadyAdded){
+        productAlreadyAdded.quantity = productAlreadyAdded.quantity + quantity;
+        productAlreadyAdded.subTotal = product.price * productAlreadyAdded.quantity;
+      }else{
+        let productToAdd = {
+          id: state.value.currentCartIndex,
+          productId: product.id,
+          quantity: quantity,
+          subTotal: product.price * quantity,
+          product: product,
+        };
+  
+        state.value.cartItems = [...state.value.cartItems, productToAdd];
+        state.value.currentCartIndex++;
+      }
       
       calculateTotal(state);
       console.log("se agregó el producto al carrito, falta crear una alerta de esto xD", action.payload);
@@ -77,6 +86,10 @@ export const shopSlice = createSlice({
     setProductModalCurrentId: (state, action) => {
       state.value.productModalCurrentId = action.payload;
     },
+    cleanCart: (state, action) => {
+      state.value.cartItems = [];
+      state.value.cartTotal = 0;
+    },
   }
 });
 
@@ -90,7 +103,8 @@ export const {
   setShowMenu,
   setProductSearchText,
   setProductModalVisible,
-  setProductModalCurrentId
+  setProductModalCurrentId,
+  cleanCart
  } = shopSlice.actions;
 
 export default shopSlice.reducer;

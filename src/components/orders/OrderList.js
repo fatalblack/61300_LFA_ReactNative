@@ -9,7 +9,7 @@ function OrderList({list, navigation}) {
         <FlatList
           data={list}
           renderItem={({item}) => <OrderRow item={item} navigation={navigation} />}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => index}
         /> :
         <Text style={stylesOrderList.emptyLabel}>Agregue órdenes</Text>
       }

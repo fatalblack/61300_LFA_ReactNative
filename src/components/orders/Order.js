@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, useWindowDimensions } from 'react-native';
-import { useSelector } from 'react-redux';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { useGetOrdersQuery } from '../../services/shopService';
 import OrderList from './OrderList';
 
 function Order({navigation}){
-  const list = useSelector(state => state.shopReducer.value.orders);
-
+  const { data: orders, isLoading, error } = useGetOrdersQuery();
+  const [list, setList] = useState([]);
   const { height, width } = useWindowDimensions();
   const [total, setTotal] = useState(0);
   const [ isLandscape, setIsLandscape ] = useState(false);
@@ -20,16 +20,24 @@ function Order({navigation}){
   }, [height, width]);
   
   useEffect(() => {
-    setTotal(list.length);
-  },[list]);
+    if(!isLoading && orders){
+      let ordersArray = Object.values(orders);
+      setList(ordersArray);
+      setTotal(ordersArray.length);
+    }else if(list === null){
+      setTotal(0);
+    }
+  },[orders]);
 
   return(
+    list ?
     <View style={isLandscape ? stylesOrder.containerLandscape : stylesOrder.container}>
       <OrderList list={list} navigation={navigation}></OrderList>
       <View>
         <Text style={stylesOrder.total}>{total} compras</Text>
       </View>
-    </View>
+    </View> :
+    <Text style={stylesOrder.emptyLabel}>No realizó ninguna compra aún.</Text>
   );
 }
 
@@ -53,6 +61,12 @@ const stylesOrder = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'JosefinBold',
     textAlign: 'right'
+  },
+  emptyLabel: {
+    textAlign: 'center',
+    paddingTop: 10,
+    fontSize: 16,
+    fontStyle: 'italic'
   }
 });
 

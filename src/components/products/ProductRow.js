@@ -22,7 +22,7 @@ function ProductRow({navigation, item}) {
   return(
     <View style={stylesProductRow.container}>
       <View style={width < DisplaySizes.minWidth ? stylesProductRow.colImageMin : stylesProductRow.colImage}>
-        <Image source={item.image} style={stylesProductRow.image} resizeMode='cover' />
+        <Image source={{ uri: item.image }} style={stylesProductRow.image} resizeMode='cover' />
       </View>
       <View style={width < DisplaySizes.minWidth ? stylesProductRow.colDescriptionMin : stylesProductRow.colDescription}>
         <Text style={width < DisplaySizes.minWidth ? stylesProductRow.textMin : stylesProductRow.text}>

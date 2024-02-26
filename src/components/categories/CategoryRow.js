@@ -18,7 +18,7 @@ function CategoryRow({navigation, item}) {
     <Pressable onPress={onSelectCategory}>
       <View style={width < DisplaySizes.minWidth ? stylesCategoryRow.containerMin : stylesCategoryRow.container}>
         <View style={stylesCategoryRow.col1}>
-          <Image source={item.icon} style={width < DisplaySizes.minWidth ? stylesCategoryRow.iconMin : stylesCategoryRow.icon} />
+          <Image source={{ uri: item.icon }} style={width < DisplaySizes.minWidth ? stylesCategoryRow.iconMin : stylesCategoryRow.icon} />
         </View>
         <View style={stylesCategoryRow.col2}>
           <Text style={width < DisplaySizes.minWidth ? stylesCategoryRow.textMin : stylesCategoryRow.text}>

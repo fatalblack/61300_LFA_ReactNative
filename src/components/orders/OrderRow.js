@@ -14,11 +14,25 @@ function OrderRow({item, navigation}) {
     navigation.navigate("OrderDetail");
   };
 
+  const padTo2Digits = (num) => {
+    return num.toString().padStart(2, '0');
+  }
+
+  const formatDate = (dateString) => {
+    let date = new Date(dateString);
+    
+    return [
+      padTo2Digits(date.getDate()),
+      padTo2Digits(date.getMonth() + 1),
+      date.getFullYear(),
+    ].join('/');
+  };
+
   return(
     <View style={stylesOrderRow.container}>
       <View style={stylesOrderRow.colDescription}>
         <Text style={width < DisplaySizes.minWidth ? stylesOrderRow.textMin : stylesOrderRow.text}>
-          #{item.id}
+          {formatDate(item.date)}
         </Text>
         <Text style={width < DisplaySizes.minWidth ? stylesOrderRow.textPriceMin : stylesOrderRow.textPrice}>
           ${item.total}

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 import { addCartItem } from '../../features/shop/shopSlice';
+import { useGetProductByIdQuery } from '../../services/shopService';
 
 function ProductDetail({navigation}) {
   const dispatch = useDispatch();
@@ -11,7 +12,9 @@ function ProductDetail({navigation}) {
   const [ isLandscape, setIsLandscape ] = useState(false);
   const [ imageHeight, setImageHeight ] = useState(0);
   const [ imageWidth, setImageWidth ] = useState(0);
-  const item = useSelector(state => state.shopReducer.value.products.find(p => p.id === state.shopReducer.value.productIdSelected));
+  const [ item, setItem ] = useState(null);
+  const productId = useSelector(state => state.shopReducer.value.productIdSelected);
+  const { data: product, isLoading, error } = useGetProductByIdQuery(productId);
 
   useEffect(()=>{
     if(width > height){
@@ -23,8 +26,13 @@ function ProductDetail({navigation}) {
       setImageHeight(height*0.5);
       setImageWidth(width);
     }
-    
   }, [height, width]);
+
+  useEffect(()=>{
+    if(!isLoading && product){
+      setItem(Object.values(product)[0]);
+    }
+  }, [product]);
 
   const onAddProduct = () => {
     dispatch(addCartItem({product: item, quantity: 1}));
@@ -35,6 +43,7 @@ function ProductDetail({navigation}) {
   };
 
   return(
+    item ?
     <ScrollView>
       <View style={stylesProductDetail.container}>
         <View style={stylesProductDetail.zoneBack}>
@@ -49,7 +58,7 @@ function ProductDetail({navigation}) {
         <View style={isLandscape ? stylesProductDetail.zoneInfoLandscape : stylesProductDetail.zoneInfoPortrait}>
           <View style={{width: isLandscape ? '50%' : '100%'}}>
             <View style={{width: imageWidth, height: imageHeight}}>
-              <Image source={item.image} style={stylesProductDetail.image} width={imageWidth} height={imageHeight} resizeMode='cover' />
+              <Image source={{ uri:item.image }} style={stylesProductDetail.image} width={imageWidth} height={imageHeight} resizeMode='cover' />
             </View>
           </View>
           <View style={{width: isLandscape ? '50%' : '100%'}}>
@@ -70,7 +79,8 @@ function ProductDetail({navigation}) {
           </View>
         </View>
       </View>
-    </ScrollView>
+    </ScrollView> :
+    <></>
   );
 }
 
