@@ -3,7 +3,7 @@ import { useFonts } from 'expo-font';
 import { Provider } from 'react-redux';
 import Store from './src/store';
 import { Fonts } from './src/globals/styles/Fonts';
-import TabNavigator from './src/navigation/TabNavigator';
+import MainNavigator from './src/navigation/MainNavigator';
 
 export default function App() {
   const [fontsLoaded] = useFonts(Fonts);
@@ -16,7 +16,7 @@ export default function App() {
     <Provider store={Store}>
       <SafeAreaView style={stylesApp.container}>
         <StatusBar/>
-        <TabNavigator/>
+        <MainNavigator/>
       </SafeAreaView>
     </Provider>
   );

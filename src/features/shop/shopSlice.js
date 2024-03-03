@@ -15,10 +15,6 @@ export const shopSlice = createSlice({
   name: 'shop',
   initialState: {
     value: {
-      //categories: CategoryData,
-      //products: ProductData,
-      //orders: OrderData,
-      //cartItems: CartData,
       orders: [],
       cartItems: [],
       cartTotal: 0,

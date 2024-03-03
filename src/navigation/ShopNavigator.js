@@ -7,7 +7,7 @@ import ProductDetail from '../components/products/ProductDetail';
 
 const Stack = createNativeStackNavigator();
 
-const Navigator = () => {
+const ShopNavigator = () => {
   return(
     <Stack.Navigator
       initialRouteName = "Home"
@@ -31,4 +31,4 @@ const Navigator = () => {
   );	
 }
 
-export default Navigator;
+export default ShopNavigator;
