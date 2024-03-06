@@ -3,7 +3,7 @@ import { base_url } from '../firebase/database';
 
 export const shopApi = createApi({
   reducerPath: 'shopApi',
-  tagTypes: ['orders'],
+  tagTypes: ['orders', 'maps'],
   baseQuery: fetchBaseQuery({ baseUrl: base_url}),
   endpoints: (builder) => ({
     getProducts: builder.query({
@@ -42,6 +42,20 @@ export const shopApi = createApi({
         }
       }),
     }),
+    postProfileLocation: builder.mutation({
+      query: ({ location, localId }) => ({
+        url: `profileLocations/${localId}.json`,
+        method: 'PUT',
+        body: {
+          location: location
+        }
+      }),
+      invalidatesTags: ['maps'],
+    }),
+    getProfileLocation: builder.query({
+      query: (localId) => `profileLocations/${localId}.json`,
+      providesTags: [ 'maps' ]
+    }),
   })
 });
 
@@ -53,5 +67,7 @@ export const {
   usePostOrderMutation,
   useGetOrdersQuery,
   useGetProfileImageQuery,
-  usePostProfileImageMutation
+  usePostProfileImageMutation,
+  usePostProfileLocationMutation,
+  useGetProfileLocationQuery,
  } = shopApi;
