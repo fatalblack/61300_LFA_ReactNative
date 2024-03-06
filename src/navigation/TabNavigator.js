@@ -5,9 +5,11 @@ import { Colors } from '../globals/styles/Colors';
 import ShopNavigator from './ShopNavigator';
 import CartNavigator from './CartNavigator';
 import OrderNavigator from './OrderNavigator';
+import MyProfileNavigator from './MyProfileNavigator';
 import iconShop from '../../assets/icon-shop.png';
 import iconCart from '../../assets/icon-cart.png';
 import iconList from '../../assets/icon-list.png';
+import iconUser from '../../assets/icon-user.png';
 
 const Tab = createBottomTabNavigator();
 
@@ -63,6 +65,18 @@ const TabNavigator = () => {
             return (
               <View style={focused ? stylesTabNavigator.buttonFocused : stylesTabNavigator.button}>
                 <Image source={iconList} style={isLandscape ? stylesTabNavigator.iconLandscape : stylesTabNavigator.icon} />
+              </View>
+            );
+          }
+        }} />
+      <Tab.Screen
+        name='MyProfileTab'
+        component={MyProfileNavigator}
+        options={{
+          tabBarIcon: ({ focused }) => {
+            return (
+              <View style={focused ? stylesTabNavigator.buttonFocused : stylesTabNavigator.button}>
+                <Image source={iconUser} style={isLandscape ? stylesTabNavigator.iconLandscape : stylesTabNavigator.icon} />
               </View>
             );
           }
