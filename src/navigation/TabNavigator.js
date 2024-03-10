@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import { StyleSheet, Image, View, useWindowDimensions } from 'react-native';
+import React from 'react';
+import { StyleSheet, Image, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Colors } from '../globals/styles/Colors';
+import { IsLandscape } from '../globals/styles/DisplaySizes';
 import ShopNavigator from './ShopNavigator';
 import CartNavigator from './CartNavigator';
 import OrderNavigator from './OrderNavigator';
@@ -13,24 +14,15 @@ import iconUser from '../../assets/icon-user.png';
 
 const Tab = createBottomTabNavigator();
 
-const TabNavigator = () => {
-  const { height, width } = useWindowDimensions();
-  const [ isLandscape, setIsLandscape ] = useState(false);
-
-  useEffect(()=>{
-    if(width > height){
-      setIsLandscape(true);
-    }else{
-      setIsLandscape(false);
-    }
-  }, [height, width]);
+const TabNavigator = () => {  
+  const isLandscape = IsLandscape();
 
   return(
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: isLandscape ? stylesTabNavigator.tabBarLandscape : stylesTabNavigator.tabBar
+        tabBarStyle: [stylesTabNavigator, isLandscape ? stylesTabNavigator.tabBarLandscape : stylesTabNavigator.tabBarPortrait]
       }}
     >
       <Tab.Screen
@@ -92,23 +84,17 @@ const stylesTabNavigator = StyleSheet.create({
     shadowColor: 'black',
     elevation: 4,
     position: 'absolute',
-    bottom: 20,
     left: 20,
     right: 20,
     borderRadius: 5,
-    height: 60
   },
   tabBarLandscape: {
-    flex: 0,
-    backgroundColor: Colors.blueMain,
-    shadowColor: 'black',
-    elevation: 4,
-    position: 'absolute',
     bottom: 10,
-    left: 20,
-    right: 20,
-    borderRadius: 5,
     height: 40
+  },
+  tabBarPortrait: {
+    bottom: 20,
+    height: 60
   },
   buttonFocused: {
     padding: 5,

@@ -1,8 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { CategoryData } from '../../globals/data/CategoryData';
-import { ProductData } from '../../globals/data/ProductData';
-import { OrderData } from '../../globals/data/OrderData';
-import { CartData } from '../../globals/data/CartData';
+import Toast from 'react-native-toast-message';
 
 const calculateTotal = (state) => {
   state.value.cartTotal = 0;
@@ -68,7 +65,12 @@ export const shopSlice = createSlice({
       }
       
       calculateTotal(state);
-      console.log("se agregó el producto al carrito, falta crear una alerta de esto xD", action.payload);
+
+      Toast.show({
+        type: 'success',
+        text1: '¡Éxito!',
+        text2: `Se agregó el producto ${product.title}`
+      });
     },
     setShowMenu: (state, action) => {
       state.value.showMenu = action.payload;

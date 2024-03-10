@@ -1,11 +1,17 @@
-import { StyleSheet, TextInput, View, Text, useWindowDimensions } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, TextInput, View, Text } from 'react-native';
+import { useEffect, useState } from 'react';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 
-function InputForm({isSecure, label, onChangeCallback, error}) {
-  const { height, width } = useWindowDimensions();
+function InputForm({isSecure, label, onChangeCallback, error, cleanInput = false}) {
   const [input, setInput] = useState('');
+  const isUnderMinWidth = IsUnderMinWidth();
+
+  useEffect(() => {
+    if (cleanInput) {
+      setInput('');
+    }
+  }, [cleanInput]);
 
   const onChangeText = (text) => {
     setInput(text);
@@ -15,13 +21,13 @@ function InputForm({isSecure, label, onChangeCallback, error}) {
   return(
     <View style={stylesInputForm.container}>
       <View>
-        <Text style={width < DisplaySizes.minWidth ? stylesInputForm.labelMin : stylesInputForm.label}>
+        <Text style={isUnderMinWidth ? stylesInputForm.labelMin : stylesInputForm.label}>
           {label}
         </Text>
       </View>
       <View>
         <TextInput
-          style={width < DisplaySizes.minWidth ? stylesInputForm.inputMin : stylesInputForm.input}
+          style={[stylesInputForm.input, isUnderMinWidth ? stylesInputForm.inputMin : stylesInputForm.inputMax]}
           placeholder={label}
           placeholderTextColor={Colors.grayDark}
           onChangeText={onChangeText}
@@ -32,7 +38,7 @@ function InputForm({isSecure, label, onChangeCallback, error}) {
         error == "" || error == null ?
         <></> :
         <View style={stylesInputForm.errorContainer}>
-          <Text style={width < DisplaySizes.minWidth ? stylesInputForm.errorTextMin : stylesInputForm.errorText}>
+          <Text style={isUnderMinWidth ? stylesInputForm.errorTextMin : stylesInputForm.errorText}>
             {error}
           </Text>
         </View>
@@ -59,26 +65,21 @@ const stylesInputForm = StyleSheet.create({
     fontWeight: '400'
   },
   input: {
-    height: 35,
     padding: 3,
     borderRadius: 5,
     color: Colors.black,
     borderWidth: 1,
     borderColor: Colors.white,
     backgroundColor: Colors.white,
-    fontSize: 18,
     fontWeight: '400'
   },
   inputMin: {
     height: 33,
-    padding: 3,
-    borderRadius: 5,
-    color: Colors.black,
-    borderWidth: 1,
-    borderColor: Colors.white,
-    backgroundColor: Colors.white,
     fontSize: 14,
-    fontWeight: '400'
+  },
+  inputMax: {
+    height: 35,
+    fontSize: 18,
   },
   errorContainer: {
     width: '96%',

@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, FlatList, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { DisplaySizes, IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 import { setProductSearchText } from '../../features/shop/shopSlice';
 import { useGetProductsByCategoryQuery } from '../../services/shopService';
 import ProductRow from './ProductRow';
@@ -12,11 +12,12 @@ function ProductList({navigation}) {
   const dispatch = useDispatch();
   const [list, setList] = useState([]);
   const [currentCategory, setCurrentCategory] = useState(null);
-  const { height, width } = useWindowDimensions();
   const searchText = useSelector(state => state.shopReducer.value.productSearchText);
   const categorySelected = useSelector(state => state.shopReducer.value.categorySelected);
   const categoryId = categorySelected.id;
   const { data: products, isLoading, error } = useGetProductsByCategoryQuery(categoryId);
+
+  const isUnderMinWidth = IsUnderMinWidth();
 
   useEffect(() => {
     if(categoryId != null){
@@ -36,7 +37,7 @@ function ProductList({navigation}) {
 
   return(
     <View style={stylesProductList.container}>
-      <Text style={width < DisplaySizes.minWidth ? stylesProductList.titleMin : stylesProductList.title}>
+      <Text style={[stylesProductList.title, isUnderMinWidth ? stylesProductList.titleMin : stylesProductList.titleMax]}>
         {currentCategory?.title}
       </Text>
       <ProductForm lastSearch={searchText}></ProductForm>
@@ -62,7 +63,7 @@ const stylesProductList = StyleSheet.create({
     alignItems: 'top',
     paddingHorizontal: 5,
     paddingTop: 5,
-    paddingBottom: DisplaySizes.paddingBottomNavigator,
+    paddingBottom: DisplaySizes.paddingBottomNavigatorLandscape,
     borderTopColor: Colors.grayLight,
     borderTopWidth: 1,
     borderBottomColor: Colors.grayLight,
@@ -74,19 +75,18 @@ const stylesProductList = StyleSheet.create({
     fontStyle: 'italic'
   },
   title: {
-    marginBottom: 10,
     textAlign: 'center',
-    fontSize: 24,
     fontFamily: 'JosefinBold',
     color: Colors.black
   },
   titleMin: {
     marginBottom: 8,
-    textAlign: 'center',
     fontSize: 20,
-    fontFamily: 'JosefinBold',
-    color: Colors.black
-  }
+  },
+  titleMax: {
+    marginBottom: 10,
+    fontSize: 24,
+  },
 });
 
 export default ProductList;

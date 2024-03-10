@@ -1,14 +1,15 @@
-import { StyleSheet, Text, View, Pressable, Modal, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Modal } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 import { deleteCartItem, setProductModalVisible } from '../../features/shop/shopSlice';
 
 function CartDeleteModal({item}) {
   const dispatch = useDispatch();
-  const { height, width } = useWindowDimensions();
   const productModalCurrentId = useSelector(state => state.shopReducer.value.productModalCurrentId);
   const visible = useSelector(state => state.shopReducer.value.productModalVisible) && productModalCurrentId === item.id;
+
+  const isUnderMinWidth = IsUnderMinWidth();
 
   const onDelete = () => {
     dispatch(deleteCartItem(item.id));
@@ -28,18 +29,18 @@ function CartDeleteModal({item}) {
       <View style={stylesCartDeleteModal.modalContainer}>
         <View style={stylesCartDeleteModal.modalBody}>
           <View>
-            <Text style={width < DisplaySizes.minWidth ? stylesCartDeleteModal.modalDetailMin : stylesCartDeleteModal.modalDetail}>
+            <Text style={isUnderMinWidth ? stylesCartDeleteModal.modalDetailMin : stylesCartDeleteModal.modalDetail}>
               ¿Desea eliminar el producto '{item.product.title}'?
             </Text>
           </View>
           <View style={stylesCartDeleteModal.modalActions}>
             <Pressable onPress={onDelete} style={stylesCartDeleteModal.modalDeleteButton}>
-              <Text style={width < DisplaySizes.minWidth ? stylesCartDeleteModal.modalDeleteButtonTextMin : stylesCartDeleteModal.modalDeleteButtonText}>
+              <Text style={isUnderMinWidth ? stylesCartDeleteModal.modalDeleteButtonTextMin : stylesCartDeleteModal.modalDeleteButtonText}>
                 Eliminar
               </Text>
             </Pressable>
             <Pressable onPress={onCancel} style={stylesCartDeleteModal.modalCancelButton}>
-              <Text style={width < DisplaySizes.minWidth ? stylesCartDeleteModal.modalCancelButtonTextMin : stylesCartDeleteModal.modalCancelButtonText}>
+              <Text style={isUnderMinWidth ? stylesCartDeleteModal.modalCancelButtonTextMin : stylesCartDeleteModal.modalCancelButtonText}>
                 Cancelar
               </Text>
             </Pressable>

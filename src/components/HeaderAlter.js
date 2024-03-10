@@ -1,22 +1,22 @@
-import { StyleSheet, Text, View, useWindowDimensions, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../globals/styles/Colors';
-import { DisplaySizes } from '../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../globals/styles/DisplaySizes';
 import { logout } from '../features/auth/authSlice';
 import { deleteSession } from '../db';
 import iconLogout from '../../assets/icon-logout.png';
 
 function HeaderAlter({navigation, route, title}) {
   const dispatch = useDispatch();
-  const { height, width } = useWindowDimensions();
   const isLogedIn = useSelector(state => state.authReducer.value.localId) !== null;
   const { localId } = useSelector(state => state.authReducer.value);
 
+  const isUnderMinWidth = IsUnderMinWidth();
+
   const doLogout = async () => {
     dispatch(logout());
-    const deletedSession = await deleteSession({localId});
-    console.log(deletedSession);
+    await deleteSession({localId});
   }
   
   return(
@@ -27,7 +27,7 @@ function HeaderAlter({navigation, route, title}) {
         </View>
         <View style={stylesHeaderAlter.midColumn}>
           <View style={stylesHeaderAlter.title}>
-            <Text style={width < DisplaySizes.minWidth ? stylesHeaderAlter.titleTextMin : stylesHeaderAlter.titleText}>
+            <Text style={isUnderMinWidth ? stylesHeaderAlter.titleTextMin : stylesHeaderAlter.titleText}>
               {title}
             </Text>
           </View>
@@ -36,7 +36,7 @@ function HeaderAlter({navigation, route, title}) {
           { !isLogedIn ? 
             <></> :
             <Pressable onPress={doLogout}>
-              <Image source={iconLogout} style={width < DisplaySizes.minWidth ? stylesHeaderAlter.iconMin : stylesHeaderAlter.icon} />
+              <Image source={iconLogout} style={isUnderMinWidth ? stylesHeaderAlter.iconMin : stylesHeaderAlter.icon} />
             </Pressable>
           }
         </View>

@@ -1,8 +1,9 @@
-import { StyleSheet, Pressable, View, Text, useWindowDimensions } from 'react-native';
+import { StyleSheet, Pressable, View, Text, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import Toast from 'react-native-toast-message';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { DisplaySizes, IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 import { useLoginMutation } from '../../services/authService';
 import { setUser } from '../../features/auth/authSlice';
 import { signinSchema } from '../../validations/signinSchema';
@@ -11,12 +12,13 @@ import InputForm from '../forms/InputForm';
 
 function Login({navigation}) {
   const dispatch = useDispatch();
-  const { height, width } = useWindowDimensions();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [triggerSignup, result] = useLoginMutation();
+
+  const isUnderMinWidth = IsUnderMinWidth();
 
   useEffect(()=>{
     if(result.data){
@@ -26,8 +28,16 @@ function Login({navigation}) {
         localId: result.data.localId,
         token: result.data.idToken
       })
-      .then(result => console.log('ok', result))
-      .catch(error => console.log('err', error.message));
+      .then(result => {
+        // acciones adicionales al login exitoso
+      })
+      .catch(error => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error al iniciar sesión',
+          text2: error.message
+        });
+      });
     }
   }, [result]);
 
@@ -60,10 +70,10 @@ function Login({navigation}) {
   }
 
   return(
-    <View style={stylesLogin.container}>
+    <ScrollView style={stylesLogin.container}>
       <View style={stylesLogin.card}>
         <View>
-          <Text style={width < DisplaySizes.minWidth ? stylesLogin.titleMin : stylesLogin.title}>
+          <Text style={[stylesLogin.title, isUnderMinWidth ? stylesLogin.titleMin : stylesLogin.titleMax]}>
             Datos de la cuenta
           </Text>
         </View>
@@ -83,32 +93,30 @@ function Login({navigation}) {
         </View>
         <View style={stylesLogin.colCenter}>
           <Pressable onPress={onSubmitForm} style={stylesLogin.submitButton}>
-            <Text style={width < DisplaySizes.minWidth ? stylesLogin.submitTextMin : stylesLogin.submitText}>
+            <Text style={[stylesLogin.submitText, isUnderMinWidth ? stylesLogin.submitTextMin : stylesLogin.submitTextMax]}>
               Entrar
             </Text>
           </Pressable>
         </View>
         <View style={stylesLogin.colCenter}>
-          <Text style={width < DisplaySizes.minWidth ? stylesLogin.registerTextMin : stylesLogin.registerText}>
+          <Text style={isUnderMinWidth ? stylesLogin.registerTextMin : stylesLogin.registerText}>
             ¿No tienes cuenta aún? 
           </Text>
           <Pressable onPress={onSignupForm}>
-            <Text style={width < DisplaySizes.minWidth ? stylesLogin.registerTextLinkMin : stylesLogin.registerTextLink}>
+            <Text style={isUnderMinWidth ? stylesLogin.registerTextLinkMin : stylesLogin.registerTextLink}>
               Registrarme
             </Text>
           </Pressable>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const stylesLogin = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
+    flex: 0,
     padding: 10
   },
   card: {
@@ -117,20 +125,20 @@ const stylesLogin = StyleSheet.create({
     borderRadius: 10,
     width: '100%',
     backgroundColor: Colors.blueAlter,
+    marginBottom: DisplaySizes.paddingBottomNavigator
   },
   title: {
-    marginBottom: 10,
     textAlign: 'center',
-    fontSize: 24,
     fontFamily: 'JosefinBold',
     color: Colors.black
   },
   titleMin: {
     marginBottom: 8,
-    textAlign: 'center',
     fontSize: 20,
-    fontFamily: 'JosefinBold',
-    color: Colors.black
+  },
+  titleMax: {
+    marginBottom: 10,
+    fontSize: 24,
   },
   colCenter: {
     justifyContent: 'center',
@@ -146,16 +154,16 @@ const stylesLogin = StyleSheet.create({
     backgroundColor: Colors.grayDark
   },
   submitText: {
-    fontWeight: '600',
-    fontSize: 24,
     color: Colors.white,
     textAlign: 'center',
+  },
+  submitTextMax: {
+    fontWeight: '600',
+    fontSize: 24,
   },
   submitTextMin: {
     fontWeight: 'bold',
     fontSize: 18,
-    color: Colors.white,
-    textAlign: 'center',
   },
   registerText: {
     fontSize: 20,

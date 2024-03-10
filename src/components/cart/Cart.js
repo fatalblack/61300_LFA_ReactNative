@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, useWindowDimensions, Pressable } from 'react-native';
+import { useEffect } from 'react';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import Toast from 'react-native-toast-message';
+import { DisplaySizes, IsLandscape } from '../../globals/styles/DisplaySizes';
 import { Colors } from '../../globals/styles/Colors';
 import { refreshCartTotal, cleanCart } from '../../features/shop/shopSlice';
 import { usePostOrderMutation } from '../../services/shopService';
@@ -11,29 +12,27 @@ function Cart({navigation}){
   const dispatch = useDispatch();
   const list = useSelector(state => state.shopReducer.value.cartItems);
   const total = useSelector(state => state.shopReducer.value.cartTotal);
-  const { height, width } = useWindowDimensions();
-  const [ isLandscape, setIsLandscape ] = useState(false);
+  const localId = useSelector(state => state.authReducer.value.localId);
   const [triggerPost, result] = usePostOrderMutation();
 
-  useEffect(()=>{
-    if(width > height){
-      setIsLandscape(true);
-    }else{
-      setIsLandscape(false);
-    }
-  }, [height, width]);
+  const isLandscape = IsLandscape();
   
   useEffect(() => {
     dispatch(refreshCartTotal());
   },[]);
 
   const confirmCart = () => {
-    triggerPost({total, buyCartList: list, date: new Date(), user: 'loggedUser'});
+    triggerPost({total, buyCartList: list, date: new Date(), user: localId});
     dispatch(cleanCart());
+    Toast.show({
+      type: 'success',
+      text1: '¡Éxito!',
+      text2: 'Se confirmó la compra'
+    });
   };
 
   return(
-    <View style={isLandscape ? stylesCart.containerLandscape : stylesCart.container}>
+    <View style={[stylesCart.container, isLandscape ? stylesCart.containerLandscape : stylesCart.containerPortrait]}>
       <CartList list={list}></CartList>
       <View style={stylesCart.row}>
         <View style={stylesCart.col}>
@@ -58,14 +57,12 @@ const stylesCart = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'top',
     justifyContent: 'top',
-    paddingBottom: DisplaySizes.paddingBottomNavigator
   },
   containerLandscape: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'top',
-    justifyContent: 'top',
     paddingBottom: DisplaySizes.paddingBottomNavigatorLandscape
+  },
+  containerPortrait: {
+    paddingBottom: DisplaySizes.paddingBottomNavigator
   },
   total: {
     paddingRight: 5,

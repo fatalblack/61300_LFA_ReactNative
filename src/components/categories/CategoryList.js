@@ -1,15 +1,15 @@
-import { StyleSheet, Text, View, FlatList, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 import { useGetCategoriesQuery } from '../../services/shopService';
 import CategoryRow from './CategoryRow';
 
 function CategoryList({navigation}) {
   const { data: list, isLoading, error } = useGetCategoriesQuery();
-  const { height, width } = useWindowDimensions();
+  const isUnderMinWidth = IsUnderMinWidth();
 
   return(
-    <View style={width < DisplaySizes.minWidth ? stylesCategoryList.containerMin : stylesCategoryList.container}>
+    <View style={[stylesCategoryList.container, isUnderMinWidth ? stylesCategoryList.containerMin : stylesCategoryList.containerMax]}>
       { list && list.length > 0 ?
         <FlatList 
           data={list}
@@ -26,9 +26,6 @@ function CategoryList({navigation}) {
 
 const stylesCategoryList = StyleSheet.create({
   container: {
-    height: 160,
-    padding: 5,
-    marginBottom: 10,
     borderTopColor: Colors.white,
     borderTopWidth: 1,
     borderBottomColor: Colors.white,
@@ -39,11 +36,11 @@ const stylesCategoryList = StyleSheet.create({
     height: 140,
     padding: 3,
     marginBottom: 7,
-    borderTopColor: Colors.white,
-    borderTopWidth: 1,
-    borderBottomColor: Colors.white,
-    borderBottomWidth: 1,
-    backgroundColor: Colors.blueMain
+  },
+  containerMax: {
+    height: 160,
+    padding: 5,
+    marginBottom: 10,
   },
   emptyLabel: {
     textAlign: 'center',

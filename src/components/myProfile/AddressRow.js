@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 import iconMap from '../../../assets/icon-map.png';
 
 function AddressRow({navigation, item}) {
-  const { height, width } = useWindowDimensions();
+  const isUnderMinWidth = IsUnderMinWidth();
 
   const onSetLocation = () => {
     navigation.navigate("LocationSelector");
@@ -12,14 +12,14 @@ function AddressRow({navigation, item}) {
 
   return(
     <View style={stylesAddressRow.container}>
-      <View style={width < DisplaySizes.minWidth ? stylesAddressRow.colDescriptionMin : stylesAddressRow.colDescription}>
-        <Text style={width < DisplaySizes.minWidth ? stylesAddressRow.textMin : stylesAddressRow.text}>
+      <View style={stylesAddressRow.colDescription}>
+        <Text style={[stylesAddressRow.text, isUnderMinWidth ? stylesAddressRow.textMin : stylesAddressRow.textMax]}>
           {item.address}
         </Text>
       </View>
       <View style={stylesAddressRow.colActions}>
         <Pressable onPress={onSetLocation}>
-          <Image source={iconMap} style={width < DisplaySizes.minWidth ? stylesAddressRow.iconMin : stylesAddressRow.icon} />
+          <Image source={iconMap} style={isUnderMinWidth ? stylesAddressRow.iconMin : stylesAddressRow.icon} />
           <Text>{item.latitude === '' || item.longitude === '' ? 'Agregar' : 'Cambiar'}</Text>
         </Pressable>
       </View>
@@ -40,19 +40,15 @@ const stylesAddressRow = StyleSheet.create({
   },
   text: {
     color: Colors.grayDark,
-    fontSize: 20,
     fontFamily: 'PlayFairBold'
   },
   textMin: {
-    color: Colors.grayDark,
     fontSize: 16,
-    fontFamily: 'PlayFairBold'
+  },
+  textMax: {
+    fontSize: 20,
   },
   colDescription: {
-    width: '70%',
-    paddingHorizontal: 4
-  },
-  colDescriptionMin: {
     width: '70%',
     paddingHorizontal: 4
   },

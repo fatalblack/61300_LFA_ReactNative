@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
+import Toast from 'react-native-toast-message';
 import { useGetProfileImageQuery } from '../services/shopService';
 import { setProfilePicture, setUser } from '../features/auth/authSlice';
 import { fetchSession } from '../db';
@@ -16,14 +17,17 @@ const MainNavigator = () => {
     (async () => {
       try {
         const session = await fetchSession({localId});
-        console.log(session);
   
         if (session?.rows.length) {
           const user = session.rows._array[0];
           dispatch(setUser(user));
         }
       } catch (error) {
-        console.log(error.message);
+        Toast.show({
+          type: 'error',
+          text1: 'Error al obtener sesión activa',
+          text2: error.message
+        });
       }
     })()
   }, []);

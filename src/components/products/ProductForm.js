@@ -1,8 +1,8 @@
-import { StyleSheet, TextInput, View, Pressable, Text, Image, useWindowDimensions } from 'react-native';
+import { StyleSheet, TextInput, View, Pressable, Text, Image } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 import { setProductSearchText } from '../../features/shop/shopSlice';
 import iconSearch from '../../../assets/icon-search.png';
 import iconCancel from '../../../assets/icon-cancel.png';
@@ -11,7 +11,8 @@ function ProductForm({lastSearch}) {
   const dispatch = useDispatch();
   const [productToSearch, setProductToSearch] = useState(lastSearch);
   const [error, setError] = useState("");
-  const { height, width } = useWindowDimensions();
+  
+  const isUnderMinWidth = IsUnderMinWidth();
 
   useEffect(() => {
     setProductToSearch(lastSearch);
@@ -43,7 +44,7 @@ function ProductForm({lastSearch}) {
       <View style={stylesProductForm.container}>
         <View style={stylesProductForm.col1}>
           <TextInput
-            style={width < DisplaySizes.minWidth ? stylesProductForm.inputMin : stylesProductForm.input}
+            style={[stylesProductForm.input, isUnderMinWidth ? stylesProductForm.inputMin : stylesProductForm.inputMax]}
             placeholder='Producto'
             placeholderTextColor={Colors.grayWhite}
             onChangeText={(text) => setProductToSearch(text)}
@@ -52,10 +53,10 @@ function ProductForm({lastSearch}) {
         <View style={stylesProductForm.col2}>
           <View style={stylesProductForm.button}>
             <Pressable onPress={onSearchProductPress}>
-              <Image source={iconSearch} style={width < DisplaySizes.minWidth ? stylesProductForm.iconMin : stylesProductForm.icon} />
+              <Image source={iconSearch} style={isUnderMinWidth ? stylesProductForm.iconMin : stylesProductForm.icon} />
             </Pressable>
             <Pressable onPress={onCleanPress}>
-              <Image source={iconCancel} style={width < DisplaySizes.minWidth ? stylesProductForm.iconMin : stylesProductForm.icon} />
+              <Image source={iconCancel} style={isUnderMinWidth ? stylesProductForm.iconMin : stylesProductForm.icon} />
             </Pressable>
           </View>
         </View>
@@ -64,7 +65,7 @@ function ProductForm({lastSearch}) {
         error == "" ?
         <></> :
         <View style={stylesProductForm.errorContainer}>
-          <Text style={width < DisplaySizes.minWidth ? stylesProductForm.errorTextMin : stylesProductForm.errorText}>{error}</Text>
+          <Text style={isUnderMinWidth ? stylesProductForm.errorTextMin : stylesProductForm.errorText}>{error}</Text>
         </View>
       }
     </>
@@ -86,7 +87,6 @@ const stylesProductForm = StyleSheet.create({
     width: '20%'
   },
   input: {
-    height: 35,
     padding: 3,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
@@ -94,20 +94,15 @@ const stylesProductForm = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.blueAlter,
     backgroundColor: Colors.blueAlter,
-    fontSize: 20,
     fontWeight: '400'
   },
   inputMin: {
     height: 33,
-    padding: 3,
-    borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5,
-    color: Colors.white,
-    borderWidth: 1,
-    borderColor: Colors.blueAlter,
-    backgroundColor: Colors.blueAlter,
     fontSize: 18,
-    fontWeight: '400'
+  },
+  inputMax: {
+    height: 35,
+    fontSize: 20,
   },
   button: {
     height: 37,

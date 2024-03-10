@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 import { setCategorySelected, setShowMenu } from '../../features/shop/shopSlice';
 
 function CategoryRow({navigation, item}) {
   const dispatch = useDispatch();
-  const { height, width } = useWindowDimensions();
+  const isUnderMinWidth = IsUnderMinWidth();
   
   const onSelectCategory = () => {
     dispatch(setShowMenu(false));
@@ -16,12 +16,12 @@ function CategoryRow({navigation, item}) {
 
   return(
     <Pressable onPress={onSelectCategory}>
-      <View style={width < DisplaySizes.minWidth ? stylesCategoryRow.containerMin : stylesCategoryRow.container}>
+      <View style={[stylesCategoryRow.container, isUnderMinWidth ? stylesCategoryRow.containerMin : stylesCategoryRow.containerMax]}>
         <View style={stylesCategoryRow.col1}>
-          <Image source={{ uri: item.icon }} style={width < DisplaySizes.minWidth ? stylesCategoryRow.iconMin : stylesCategoryRow.icon} />
+          <Image source={{ uri: item.icon }} style={isUnderMinWidth ? stylesCategoryRow.iconMin : stylesCategoryRow.icon} />
         </View>
         <View style={stylesCategoryRow.col2}>
-          <Text style={width < DisplaySizes.minWidth ? stylesCategoryRow.textMin : stylesCategoryRow.text}>
+          <Text style={[stylesCategoryRow.text, isUnderMinWidth ? stylesCategoryRow.textMin : stylesCategoryRow.textMax]}>
             {item.title}
           </Text>
         </View>
@@ -32,7 +32,6 @@ function CategoryRow({navigation, item}) {
 
 const stylesCategoryRow = StyleSheet.create({
   container: {
-    height: 30,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -44,26 +43,21 @@ const stylesCategoryRow = StyleSheet.create({
   },
   containerMin: {
     height: 26,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flex: 0,
-    marginVertical: 3,
-    padding: 4,
-    borderColor: Colors.white,
-    borderBottomColor: Colors.grayLight
+  },
+  containerMax: {
+    height: 30,
   },
   text: {
     color: Colors.grayDark,
-    lineHeight: 24,
-    fontSize: 22,
     fontFamily: 'JosefinBold'
   },
   textMin: {
-    color: Colors.grayDark,
     lineHeight: 20,
     fontSize: 18,
-    fontFamily: 'JosefinBold'
+  },
+  textMax: {
+    lineHeight: 24,
+    fontSize: 22,
   },
   col1: {
     width: '15%'

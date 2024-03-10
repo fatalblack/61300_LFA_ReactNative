@@ -1,28 +1,21 @@
-import { StyleSheet, Image, View, Text, useWindowDimensions } from 'react-native';
-import { useState, useEffect } from 'react';
+import { StyleSheet, Image, View, Text } from 'react-native';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { DisplaySizes, IsUnderMinWidth, IsLandscape } from '../../globals/styles/DisplaySizes';
 import { setProfilePicture } from '../../features/auth/authSlice';
 import { usePostProfileImageMutation } from '../../services/shopService';
 import AddButton from './AddButton';
 
 const ImageSelector = ({navigation}) => {
-  const { height, width } = useWindowDimensions();
-  const [ isLandscape, setIsLandscape ] = useState(false);
   const [image, setImage] = useState(null);
   const dispatch = useDispatch();
   const {localId} = useSelector(state => state.authReducer.value)
   const [triggerSaveProfileImage, result] = usePostProfileImageMutation();
 
-  useEffect(()=>{
-    if(width > height){
-      setIsLandscape(true);
-    }else{
-      setIsLandscape(false);
-    }
-  }, [height, width]);
+  const isUnderMinWidth = IsUnderMinWidth();
+  const isLandscape = IsLandscape();
 
   const verifyCameraPermissions = async () => {
     const {granted} = await ImagePicker.requestCameraPermissionsAsync();
@@ -55,7 +48,7 @@ const ImageSelector = ({navigation}) => {
   };
 
   return (
-    <View style={isLandscape ? stylesImageSelector.containerLandscape : stylesImageSelector.container}>
+    <View style={[stylesImageSelector.container, isLandscape ? stylesImageSelector.containerLandscape : stylesImageSelector.containerPortrait]}>
       { image ?
         <>
           <Image source={{ uri: image }} style={stylesImageSelector.image} />
@@ -66,11 +59,13 @@ const ImageSelector = ({navigation}) => {
         </> :
         <>
           <View style={stylesImageSelector.noPhotoContainer}>
-            <Text style={width < DisplaySizes.minWidth ? stylesImageSelector.noPhotoTextMin : stylesImageSelector.noPhotoText}>
+            <Text style={isUnderMinWidth ? stylesImageSelector.noPhotoTextMin : stylesImageSelector.noPhotoText}>
               No hay una foto para ver aún
             </Text>
           </View>
-          <AddButton title='Tomar foto' onPress={pickImage} />
+          <View style={isLandscape ? stylesImageSelector.actionsLandscape : stylesImageSelector.actions}>
+            <AddButton title='Tomar otra foto' onPress={pickImage} />
+          </View>
         </>
       }
     </View>
@@ -79,20 +74,19 @@ const ImageSelector = ({navigation}) => {
 
 const stylesImageSelector = StyleSheet.create({
   container: {
-    flex: 0,
-    flexDirection: 'column',
     justifyContent: 'center',
     width: '100%',
     paddingTop: 10,
-    paddingBottom: DisplaySizes.paddingBottomNavigator
   },
   containerLandscape: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
-    width: '100%',
-    paddingTop: 10,
     paddingBottom: DisplaySizes.paddingBottomNavigatorLandscape
+  },
+  containerPortrait: {
+    flex: 0,
+    flexDirection: 'column',
+    paddingBottom: DisplaySizes.paddingBottomNavigator
   },
   noPhotoContainer: {
     width: 96,
@@ -111,7 +105,7 @@ const stylesImageSelector = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
   },
-  noPhotoTextText: {
+  noPhotoText: {
     fontSize: 18,
     textAlign: 'center',
   },

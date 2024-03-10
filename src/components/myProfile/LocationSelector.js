@@ -1,9 +1,9 @@
-import { StyleSheet, ScrollView, View, Text, useWindowDimensions } from 'react-native';
+import { StyleSheet, ScrollView, View, Text } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Location from 'expo-location';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { DisplaySizes, IsUnderMinWidth, IsLandscape } from '../../globals/styles/DisplaySizes';
 import { setProfileLocation } from '../../features/auth/authSlice';
 import { usePostProfileLocationMutation } from '../../services/shopService';
 import { googleAPI } from '../../firebase/googleAPI';
@@ -11,8 +11,6 @@ import AddButton from './AddButton';
 import MapPreview from './MapPreview';
 
 const LocationSelector = ({navigation}) => {
-  const { height, width } = useWindowDimensions();
-  const [ isLandscape, setIsLandscape ] = useState(false);
   const [ location, setLocation ] = useState({latitude: "", longitude: ""});
   const [ error, setError ] = useState("");
   const [ address, setAddress ] = useState("");
@@ -20,13 +18,8 @@ const LocationSelector = ({navigation}) => {
   const {localId} = useSelector(state => state.authReducer.value);
   const [triggerSaveProfileLocation, result] = usePostProfileLocationMutation();
 
-  useEffect(()=>{
-    if(width > height){
-      setIsLandscape(true);
-    }else{
-      setIsLandscape(false);
-    }
-  }, [height, width]);
+  const isUnderMinWidth = IsUnderMinWidth();
+  const isLandscape = IsLandscape();
 
   useEffect(() => {
     (async () => {
@@ -52,7 +45,7 @@ const LocationSelector = ({navigation}) => {
           const urlReverseGeocode = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.latitude},${location.longitude}&key=${googleAPI.mapStatic}`;
           const response = await fetch(urlReverseGeocode);
           const data = await response.json();
-          console.dir(data);
+
           setAddress(data.results[0].formatted_address);
         }
       } catch (error) {
@@ -70,14 +63,14 @@ const LocationSelector = ({navigation}) => {
   };
 
   return (
-    <ScrollView style={isLandscape ? stylesLocationSelector.containerLandscape : stylesLocationSelector.container}>
+    <ScrollView style={[stylesLocationSelector.container, isLandscape ? stylesLocationSelector.containerLandscape : stylesLocationSelector.containerPortrait]}>
       { location && error === '' ?
         <>
-          <Text style={width < DisplaySizes.minWidth ? stylesLocationSelector.locationTextMin : stylesLocationSelector.locationText}>
+          <Text style={[stylesLocationSelector.locationText, isUnderMinWidth ? stylesLocationSelector.locationTextMin : stylesLocationSelector.locationTextMax]}>
             Lat: {location.latitude}, Long:{location.longitude}
           </Text>
           <MapPreview location={location} />
-          <Text style={width < DisplaySizes.minWidth ? stylesLocationSelector.locationTextMin : stylesLocationSelector.locationText}>
+          <Text style={isUnderMinWidth ? stylesLocationSelector.locationTextMin : stylesLocationSelector.locationText}>
             {address}
           </Text>
           <View style={isLandscape ? stylesLocationSelector.actionsLandscape : stylesLocationSelector.actions}>
@@ -86,7 +79,7 @@ const LocationSelector = ({navigation}) => {
         </> :
         <>
           <View style={stylesLocationSelector.noLocationContainer}>
-            <Text style={width < DisplaySizes.minWidth ? stylesLocationSelector.errorTextMin : stylesLocationSelector.errorText}>
+            <Text style={[stylesLocationSelector.errorText, isUnderMinWidth ? stylesLocationSelector.errorTextMin : stylesLocationSelector.errorTextMax]}>
               {error}
             </Text>
           </View>
@@ -102,14 +95,12 @@ const stylesLocationSelector = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     paddingTop: 10,
-    marginBottom: DisplaySizes.paddingBottomNavigator
   },
   containerLandscape: {
-    flex: 0,
-    flexDirection: 'column',
-    width: '100%',
-    paddingTop: 10,
     marginBottom: DisplaySizes.paddingBottomNavigatorLandscape
+  },
+  containerPortrait: {
+    marginBottom: DisplaySizes.paddingBottomNavigator
   },
   noLocationContainer: {
     width: '100%',
@@ -128,24 +119,23 @@ const stylesLocationSelector = StyleSheet.create({
   locationText: {
     width: '100%',
     textAlign: 'center',
-    fontSize: 18,
     textAlign: 'center',
   },
   locationTextMin: {
-    width: '100%',
-    textAlign: 'center',
     fontSize: 14,
-    textAlign: 'center',
+  },
+  locationTextMax: {
+    fontSize: 18,
   },
   errorText: {
     color: Colors.redAlert,
-    fontSize: 18,
     textAlign: 'center',
   },
   errorTextMin: {
-    color: Colors.redAlert,
     fontSize: 14,
-    textAlign: 'center',
+  },
+  errorTextMax: {
+    fontSize: 18,
   },
   map: {
     width: 96,

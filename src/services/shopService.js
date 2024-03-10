@@ -27,7 +27,7 @@ export const shopApi = createApi({
       invalidatesTags: ['orders'],
     }),
     getOrders: builder.query({
-      query: () => `orders.json`,
+      query: (localId) => `orders.json?orderBy="user"&equalTo="${localId}"`,
       providesTags: [ 'orders' ]
     }),
     getProfileImage: builder.query({

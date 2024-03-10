@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../globals/styles/Colors';
-import { DisplaySizes } from '../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../globals/styles/DisplaySizes';
 import { setShowMenu } from '../features/shop/shopSlice';
 import { logout } from '../features/auth/authSlice';
 import { deleteSession } from '../db';
@@ -14,7 +14,8 @@ function Header({navigation}) {
   const dispatch = useDispatch();
   const showMenu = useSelector(state => state.shopReducer.value.showMenu);
   const { localId } = useSelector(state => state.authReducer.value);
-  const { height, width } = useWindowDimensions();
+
+  const isUnderMinWidth = IsUnderMinWidth();
   
   const visibleListTrigger = () => {
     dispatch(setShowMenu(!showMenu));
@@ -22,8 +23,7 @@ function Header({navigation}) {
 
   const doLogout = async () => {
     dispatch(logout());
-    const deletedSession = await deleteSession({localId});
-    console.log(deletedSession);
+    await deleteSession({localId});
   }
 
   return(
@@ -31,17 +31,17 @@ function Header({navigation}) {
       <View style={stylesHeader.row}>
         <View style={stylesHeader.sideColumn}>
           <Pressable onPress={visibleListTrigger}>
-            <Image source={iconBars} style={width < DisplaySizes.minWidth ? stylesHeader.iconMin : stylesHeader.icon} />
+            <Image source={iconBars} style={isUnderMinWidth ? stylesHeader.iconMin : stylesHeader.icon} />
           </Pressable>
         </View>
         <View style={stylesHeader.midColumn}>
           <View style={stylesHeader.brand}>
-            <Text style={width < DisplaySizes.minWidth ? stylesHeader.brandTextMin : stylesHeader.brandText}>Maggie Asian Shop</Text>
+            <Text style={isUnderMinWidth ? stylesHeader.brandTextMin : stylesHeader.brandText}>Maggie Asian Shop</Text>
           </View>
         </View>
         <View style={stylesHeader.sideColumn}>
           <Pressable onPress={doLogout}>
-            <Image source={iconLogout} style={width < DisplaySizes.minWidth ? stylesHeader.iconMin : stylesHeader.icon} />
+            <Image source={iconLogout} style={isUnderMinWidth ? stylesHeader.iconMin : stylesHeader.icon} />
           </Pressable>
         </View>
       </View>

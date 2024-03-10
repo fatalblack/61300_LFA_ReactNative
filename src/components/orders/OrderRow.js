@@ -1,13 +1,14 @@
-import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 import { setOrderCartSelected } from '../../features/shop/shopSlice';
 import iconDetail from '../../../assets/icon-detail.png';
 
 function OrderRow({item, navigation}) {
   const dispatch = useDispatch();
-  const { height, width } = useWindowDimensions();
+  
+  const isUnderMinWidth = IsUnderMinWidth();
   
   const onViewDetail = () => {
     dispatch(setOrderCartSelected(item));
@@ -31,16 +32,16 @@ function OrderRow({item, navigation}) {
   return(
     <View style={stylesOrderRow.container}>
       <View style={stylesOrderRow.colDescription}>
-        <Text style={width < DisplaySizes.minWidth ? stylesOrderRow.textMin : stylesOrderRow.text}>
+        <Text style={[stylesOrderRow.text, isUnderMinWidth ? stylesOrderRow.textMin : stylesOrderRow.textMax]}>
           {formatDate(item.date)}
         </Text>
-        <Text style={width < DisplaySizes.minWidth ? stylesOrderRow.textPriceMin : stylesOrderRow.textPrice}>
+        <Text style={[stylesOrderRow.text, isUnderMinWidth ? stylesOrderRow.textMin : stylesOrderRow.textMax]}>
           ${item.total}
         </Text>
       </View>
       <View style={stylesOrderRow.colActions}>
         <Pressable onPress={onViewDetail}>
-          <Image source={iconDetail} style={width < DisplaySizes.minWidth ? stylesOrderRow.iconMin : stylesOrderRow.icon} />
+          <Image source={iconDetail} style={isUnderMinWidth ? stylesOrderRow.iconMin : stylesOrderRow.icon} />
         </Pressable>
       </View>
     </View>
@@ -60,23 +61,13 @@ const stylesOrderRow = StyleSheet.create({
   },
   text: {
     color: Colors.grayDark,
-    fontSize: 20,
     fontFamily: 'PlayFairBold'
   },
   textMin: {
-    color: Colors.grayDark,
     fontSize: 16,
-    fontFamily: 'PlayFairBold'
   },
-  textPrice: {
-    color: Colors.grayDark,
+  textMax: {
     fontSize: 20,
-    fontFamily: 'PlayFairBold'
-  },
-  textPriceMin: {
-    color: Colors.grayDark,
-    fontSize: 16,
-    fontFamily: 'PlayFairBold'
   },
   colDescription: {
     width: '80%',

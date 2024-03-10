@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 import { setProductIdSelected, addCartItem } from '../../features/shop/shopSlice';
 import iconAdd from '../../../assets/icon-add.png';
 import iconDetail from '../../../assets/icon-detail.png';
 
 function ProductRow({navigation, item}) {
   const dispatch = useDispatch();
-  const { height, width } = useWindowDimensions();
+  const isUnderMinWidth = IsUnderMinWidth();
 
   const onAddProduct = () => {
     dispatch(addCartItem({product: item, quantity: 1}));
@@ -21,23 +21,23 @@ function ProductRow({navigation, item}) {
 
   return(
     <View style={stylesProductRow.container}>
-      <View style={width < DisplaySizes.minWidth ? stylesProductRow.colImageMin : stylesProductRow.colImage}>
+      <View style={isUnderMinWidth ? stylesProductRow.colImageMin : stylesProductRow.colImage}>
         <Image source={{ uri: item.image }} style={stylesProductRow.image} resizeMode='cover' />
       </View>
-      <View style={width < DisplaySizes.minWidth ? stylesProductRow.colDescriptionMin : stylesProductRow.colDescription}>
-        <Text style={width < DisplaySizes.minWidth ? stylesProductRow.textMin : stylesProductRow.text}>
+      <View style={isUnderMinWidth ? stylesProductRow.colDescriptionMin : stylesProductRow.colDescription}>
+        <Text style={[stylesProductRow.text, isUnderMinWidth ? stylesProductRow.textMin : stylesProductRow.textMax]}>
           {item.title}
         </Text>
-        <Text style={width < DisplaySizes.minWidth ? stylesProductRow.textPriceMin : stylesProductRow.textPrice}>
+        <Text style={[stylesProductRow.text, isUnderMinWidth ? stylesProductRow.textMin : stylesProductRow.textMax]}>
           ${item.price}
         </Text>
       </View>
       <View style={stylesProductRow.colActions}>
         <Pressable onPress={onViewDetail}>
-          <Image source={iconDetail} style={width < DisplaySizes.minWidth ? stylesProductRow.iconMin : stylesProductRow.icon} />
+          <Image source={iconDetail} style={isUnderMinWidth ? stylesProductRow.iconMin : stylesProductRow.icon} />
         </Pressable>
         <Pressable onPress={onAddProduct}>
-          <Image source={iconAdd} style={width < DisplaySizes.minWidth ? stylesProductRow.iconMin : stylesProductRow.icon} />
+          <Image source={iconAdd} style={isUnderMinWidth ? stylesProductRow.iconMin : stylesProductRow.icon} />
         </Pressable>
       </View>
     </View>
@@ -57,23 +57,13 @@ const stylesProductRow = StyleSheet.create({
   },
   text: {
     color: Colors.grayDark,
-    fontSize: 20,
     fontFamily: 'PlayFairBold'
   },
   textMin: {
-    color: Colors.grayDark,
     fontSize: 16,
-    fontFamily: 'PlayFairBold'
   },
-  textPrice: {
-    color: Colors.grayDark,
+  textMax: {
     fontSize: 20,
-    fontFamily: 'PlayFairBold'
-  },
-  textPriceMin: {
-    color: Colors.grayDark,
-    fontSize: 16,
-    fontFamily: 'PlayFairBold'
   },
   colImage: {
     width: '25%'

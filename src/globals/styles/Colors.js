@@ -9,5 +9,8 @@ export const Colors = {
     redAlert: '#f08080',
     blueAlter: '#6495ed',
     pinkMain: '#fcd1c9',
-    pinkAlter: '#fde1db'
+    pinkAlter: '#fde1db',
+    greenToast: '#50af72',
+    redToast: '#af5050',
+    blueToast: '#8dcee1'
 };

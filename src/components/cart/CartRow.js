@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 import { setProductModalVisible, setProductModalCurrentId } from '../../features/shop/shopSlice';
 import CartDeleteModal from './CartDeleteModal';
 import iconDelete from '../../../assets/icon-delete.png';
 
 function CartRow({item}) {
   const dispatch = useDispatch();
-  const { height, width } = useWindowDimensions();
+  const isUnderMinWidth = IsUnderMinWidth();
 
   const onOpenDeleteModal = () => {
     dispatch(setProductModalCurrentId(item.id));
@@ -17,20 +17,20 @@ function CartRow({item}) {
 
   return(
     <View style={stylesCartRow.container}>
-      <View style={width < DisplaySizes.minWidth ? stylesCartRow.colImageMin : stylesCartRow.colImage}>
+      <View style={isUnderMinWidth ? stylesCartRow.colImageMin : stylesCartRow.colImage}>
         <Image source={{ uri: item.product.image }} style={stylesCartRow.image} resizeMode='cover' />
       </View>
-      <View style={width < DisplaySizes.minWidth ? stylesCartRow.colDescriptionMin : stylesCartRow.colDescription}>
-        <Text style={width < DisplaySizes.minWidth ? stylesCartRow.textMin : stylesCartRow.text}>
+      <View style={isUnderMinWidth ? stylesCartRow.colDescriptionMin : stylesCartRow.colDescription}>
+        <Text style={[stylesCartRow.text, isUnderMinWidth ? stylesCartRow.textMin : stylesCartRow.textMax]}>
           {item.product.title}
         </Text>
-        <Text style={width < DisplaySizes.minWidth ? stylesCartRow.textPriceMin : stylesCartRow.textPrice}>
+        <Text style={[stylesCartRow.text, isUnderMinWidth ? stylesCartRow.textMin : stylesCartRow.textMax]}>
           ${item.subTotal} (${item.product.price} x {item.quantity})
         </Text>
       </View>
       <View style={stylesCartRow.colActions}>
         <Pressable onPress={onOpenDeleteModal}>
-          <Image source={iconDelete} style={width < DisplaySizes.minWidth ? stylesCartRow.iconMin : stylesCartRow.icon} />
+          <Image source={iconDelete} style={isUnderMinWidth ? stylesCartRow.iconMin : stylesCartRow.icon} />
         </Pressable>
       </View>
       <CartDeleteModal item={item} />
@@ -51,23 +51,13 @@ const stylesCartRow = StyleSheet.create({
   },
   text: {
     color: Colors.grayDark,
-    fontSize: 20,
     fontFamily: 'PlayFairBold'
   },
   textMin: {
-    color: Colors.grayDark,
     fontSize: 16,
-    fontFamily: 'PlayFairBold'
   },
-  textPrice: {
-    color: Colors.grayDark,
+  textMax: {
     fontSize: 20,
-    fontFamily: 'PlayFairBold'
-  },
-  textPriceMin: {
-    color: Colors.grayDark,
-    fontSize: 16,
-    fontFamily: 'PlayFairBold'
   },
   colImage: {
     width: '25%'

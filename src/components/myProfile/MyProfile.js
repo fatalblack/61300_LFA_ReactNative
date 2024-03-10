@@ -1,22 +1,13 @@
-import { StyleSheet, Image, ScrollView, useWindowDimensions } from 'react-native';
-import { useState, useEffect } from 'react';
+import { StyleSheet, Image, ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { DisplaySizes, IsLandscape } from '../../globals/styles/DisplaySizes';
 import AddButton from './AddButton';
 
 function MyProfile({navigation}) {
-  const { height, width } = useWindowDimensions();
   const image = useSelector(state => state.authReducer.value.profilePicture);
-  const [ isLandscape, setIsLandscape ] = useState(false);
 
-  useEffect(()=>{
-    if(width > height){
-      setIsLandscape(true);
-    }else{
-      setIsLandscape(false);
-    }
-  }, [height, width]);
+  const isLandscape = IsLandscape();
 
   const goToImageSelector = () => {
     navigation.navigate('ImageSelector');
@@ -27,7 +18,7 @@ function MyProfile({navigation}) {
   }
 
   return (
-    <ScrollView style={isLandscape ? stylesMyProfile.containerLandscape : stylesMyProfile.container}>
+    <ScrollView style={[stylesMyProfile.container, isLandscape ? stylesMyProfile.containerLandscape : stylesMyProfile.containerPortrait]}>
       { image ?
         <>
           <Image
@@ -62,14 +53,12 @@ const stylesMyProfile = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     paddingTop: 10,
-    marginBottom: DisplaySizes.paddingBottomNavigator,
   },
   containerLandscape: {
-    flex: 0,
-    flexDirection: 'column',
-    width: '100%',
-    paddingTop: 10,
     marginBottom: DisplaySizes.paddingBottomNavigatorLandscape,
+  },
+  containerPortrait: {
+    marginBottom: DisplaySizes.paddingBottomNavigator,
   },
   image: {
     width: 96,

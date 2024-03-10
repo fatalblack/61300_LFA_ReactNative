@@ -1,20 +1,20 @@
-import { StyleSheet, Text, View, Image, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 
 function OrderCartRow({item}) {
-  const { height, width } = useWindowDimensions();
+  const isUnderMinWidth = IsUnderMinWidth();
 
   return(
     <View style={stylesOrderCartRow.container}>
-      <View style={width < DisplaySizes.minWidth ? stylesOrderCartRow.colImageMin : stylesOrderCartRow.colImage}>
+      <View style={isUnderMinWidth ? stylesOrderCartRow.colImageMin : stylesOrderCartRow.colImage}>
         <Image source={{ uri: item.product.image }} style={stylesOrderCartRow.image} resizeMode='cover' />
       </View>
-      <View style={width < DisplaySizes.minWidth ? stylesOrderCartRow.colDescriptionMin : stylesOrderCartRow.colDescription}>
-        <Text style={width < DisplaySizes.minWidth ? stylesOrderCartRow.textMin : stylesOrderCartRow.text}>
+      <View style={isUnderMinWidth ? stylesOrderCartRow.colDescriptionMin : stylesOrderCartRow.colDescription}>
+        <Text style={[stylesOrderCartRow.text, isUnderMinWidth ? stylesOrderCartRow.textMin : stylesOrderCartRow.textMax]}>
           {item.product.title}
         </Text>
-        <Text style={width < DisplaySizes.minWidth ? stylesOrderCartRow.textPriceMin : stylesOrderCartRow.textPrice}>
+        <Text style={[stylesOrderCartRow.text, isUnderMinWidth ? stylesOrderCartRow.textMin : stylesOrderCartRow.textMax]}>
           ${item.subTotal} (${item.product.price} x {item.quantity})
         </Text>
       </View>
@@ -35,23 +35,13 @@ const stylesOrderCartRow = StyleSheet.create({
   },
   text: {
     color: Colors.grayDark,
-    fontSize: 20,
     fontFamily: 'PlayFairBold'
   },
   textMin: {
-    color: Colors.grayDark,
     fontSize: 16,
-    fontFamily: 'PlayFairBold'
   },
-  textPrice: {
-    color: Colors.grayDark,
+  textMax: {
     fontSize: 20,
-    fontFamily: 'PlayFairBold'
-  },
-  textPriceMin: {
-    color: Colors.grayDark,
-    fontSize: 16,
-    fontFamily: 'PlayFairBold'
   },
   colImage: {
     width: '25%'

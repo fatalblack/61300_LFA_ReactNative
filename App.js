@@ -5,12 +5,18 @@ import Store from './src/store';
 import { Fonts } from './src/globals/styles/Fonts';
 import MainNavigator from './src/navigation/MainNavigator';
 import { init } from './src/db';
+import CustomToast from './src/components/shared/CustomToast';
 
 init()
-  .then(() => console.log('DB inicializada'))
-  .catch(err => {
-    console.log('Falló la inicialización de la DB');
-    console.log(err.message);
+  .then(() => {
+    // acciones adicionales a la inicialización exitoso de la DB
+  })
+  .catch(error => {
+    Toast.show({
+      type: 'error',
+      text1: 'Error al inicializar la DB',
+      text2: error.message
+    });
   });
 
 export default function App() {
@@ -25,6 +31,7 @@ export default function App() {
       <SafeAreaView style={stylesApp.container}>
         <StatusBar/>
         <MainNavigator/>
+        <CustomToast />
       </SafeAreaView>
     </Provider>
   );

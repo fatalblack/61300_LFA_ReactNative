@@ -1,20 +1,29 @@
-import { StyleSheet, Pressable, View, Text, useWindowDimensions } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, Pressable, View, Text, ScrollView } from 'react-native';
+import { useState, useEffect } from 'react';
+import Toast from 'react-native-toast-message';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { DisplaySizes, IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 import { useSignUpMutation } from '../../services/authService';
 import { signupSchema } from '../../validations/signupSchema';
 import InputForm from '../forms/InputForm';
 
 function Signup({navigation}) {
-  const { height, width } = useWindowDimensions();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [cleanInput, setCleanInput] = useState(false);
   const [triggerSignup, result] = useSignUpMutation();
+
+  const isUnderMinWidth = IsUnderMinWidth();
+
+  useEffect(() => {
+    if (cleanInput) {
+      setCleanInput(false);
+    }
+  }, [cleanInput]);
 
   const onSubmitForm = () => {
     try{
@@ -32,6 +41,15 @@ function Signup({navigation}) {
       setEmail('');
       setPassword('');
       setConfirmPassword('');
+
+      Toast.show({
+        type: 'success',
+        text1: '¡Éxito!',
+        text2: `Se creó el usuario ${email}`
+      });
+
+      setCleanInput(true);
+      navigation.navigate('Login');
     }catch(err){
       if(err.path === 'email'){
         setEmailError(err.message);
@@ -50,10 +68,10 @@ function Signup({navigation}) {
   }
 
   return(
-    <View style={stylesSignup.container}>
+    <ScrollView style={stylesSignup.container}>
       <View style={stylesSignup.card}>
         <View>
-          <Text style={width < DisplaySizes.minWidth ? stylesSignup.titleMin : stylesSignup.title}>
+          <Text style={[stylesSignup.title, isUnderMinWidth ? stylesSignup.titleMin : stylesSignup.titleMax]}>
             Datos de la cuenta
           </Text>
         </View>
@@ -62,48 +80,49 @@ function Signup({navigation}) {
             isSecure={false}
             label='Email'
             onChangeCallback={setEmail}
-            error={emailError}>
+            error={emailError}
+            cleanInput={cleanInput}>
           </InputForm>
           <InputForm
             isSecure={true}
             label='Contraseña'
             onChangeCallback={setPassword}
-            error={passwordError}>
+            error={passwordError}
+            cleanInput={cleanInput}>
           </InputForm>
           <InputForm
             isSecure={true}
             label='Confirmar contraseña'
             onChangeCallback={setConfirmPassword}
-            error={confirmPasswordError}>
+            error={confirmPasswordError}
+            cleanInput={cleanInput}>
           </InputForm>
         </View>
         <View style={stylesSignup.colCenter}>
           <Pressable onPress={onSubmitForm} style={stylesSignup.submitButton}>
-            <Text style={width < DisplaySizes.minWidth ? stylesSignup.submitTextMin : stylesSignup.submitText}>
+            <Text style={[stylesSignup.submitText, isUnderMinWidth ? stylesSignup.submitTextMin : stylesSignup.submitTextMax]}>
                 Crear cuenta
             </Text>
           </Pressable>
         </View>
         <View style={stylesSignup.colCenter}>
-          <Text style={width < DisplaySizes.minWidth ? stylesSignup.registerTextMin : stylesSignup.registerText}>
+          <Text style={isUnderMinWidth ? stylesSignup.registerTextMin : stylesSignup.registerText}>
             ¿Ya tienes cuenta? 
           </Text>
           <Pressable onPress={onLoginForm}>
-            <Text style={width < DisplaySizes.minWidth ? stylesSignup.registerTextLinkMin : stylesSignup.registerTextLink}>
+            <Text style={isUnderMinWidth ? stylesSignup.registerTextLinkMin : stylesSignup.registerTextLink}>
               Iniciar sesión
             </Text>
           </Pressable>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const stylesSignup = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
     flex: 1,
     padding: 10
   },
@@ -113,20 +132,20 @@ const stylesSignup = StyleSheet.create({
     borderRadius: 10,
     width: '100%',
     backgroundColor: Colors.blueAlter,
+    marginBottom: DisplaySizes.paddingBottomNavigatorLandscape
   },
   title: {
-    marginBottom: 10,
     textAlign: 'center',
-    fontSize: 24,
     fontFamily: 'JosefinBold',
     color: Colors.black
   },
   titleMin: {
     marginBottom: 8,
-    textAlign: 'center',
     fontSize: 20,
-    fontFamily: 'JosefinBold',
-    color: Colors.black
+  },
+  titleMax: {
+    marginBottom: 10,
+    fontSize: 24,
   },
   colCenter: {
     justifyContent: 'center',
@@ -142,16 +161,16 @@ const stylesSignup = StyleSheet.create({
     backgroundColor: Colors.grayDark
   },
   submitText: {
-    fontWeight: '600',
-    fontSize: 24,
     color: Colors.white,
     textAlign: 'center',
   },
   submitTextMin: {
     fontWeight: 'bold',
     fontSize: 18,
-    color: Colors.white,
-    textAlign: 'center',
+  },
+  submitTextMax: {
+    fontWeight: '600',
+    fontSize: 24,
   },
   registerText: {
     fontSize: 20,

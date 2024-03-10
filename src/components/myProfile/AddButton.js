@@ -1,14 +1,14 @@
-import { StyleSheet, Pressable, View, Text, useWindowDimensions } from 'react-native';
+import { StyleSheet, Pressable, View, Text } from 'react-native';
 import { Colors } from '../../globals/styles/Colors';
-import { DisplaySizes } from '../../globals/styles/DisplaySizes';
+import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
 
 function AddButton({title, onPress}) {
-  const { height, width } = useWindowDimensions();
+  const isUnderMinWidth = IsUnderMinWidth();
 
   return (
     <View style={stylesAddButton.container}>
       <Pressable onPress={onPress} style={stylesAddButton.submitButton}>
-        <Text style={width < DisplaySizes.minWidth ? stylesAddButton.submitTextMin : stylesAddButton.submitText}>
+        <Text style={[stylesAddButton.submitText, isUnderMinWidth ? stylesAddButton.submitTextMin : stylesAddButton.submitTextMax]}>
           {title}
         </Text>
       </Pressable>
@@ -34,16 +34,16 @@ const stylesAddButton = StyleSheet.create({
     backgroundColor: Colors.grayDark
   },
   submitText: {
-    fontWeight: '600',
-    fontSize: 22,
     color: Colors.white,
     textAlign: 'center',
   },
   submitTextMin: {
     fontWeight: 'bold',
     fontSize: 16,
-    color: Colors.white,
-    textAlign: 'center',
+  },
+  submitTextMax: {
+    fontWeight: '600',
+    fontSize: 22,
   },
 });
 
