@@ -4,6 +4,14 @@ import { Provider } from 'react-redux';
 import Store from './src/store';
 import { Fonts } from './src/globals/styles/Fonts';
 import MainNavigator from './src/navigation/MainNavigator';
+import { init } from './src/db';
+
+init()
+  .then(() => console.log('DB inicializada'))
+  .catch(err => {
+    console.log('Falló la inicialización de la DB');
+    console.log(err.message);
+  });
 
 export default function App() {
   const [fontsLoaded] = useFonts(Fonts);

@@ -1,46 +1,89 @@
-import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, useWindowDimensions, Pressable, Image } from 'react-native';
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../globals/styles/Colors';
 import { DisplaySizes } from '../globals/styles/DisplaySizes';
+import { logout } from '../features/auth/authSlice';
+import { deleteSession } from '../db';
+import iconLogout from '../../assets/icon-logout.png';
 
 function HeaderAlter({navigation, route, title}) {
+  const dispatch = useDispatch();
   const { height, width } = useWindowDimensions();
+  const isLogedIn = useSelector(state => state.authReducer.value.localId) !== null;
+  const { localId } = useSelector(state => state.authReducer.value);
+
+  const doLogout = async () => {
+    dispatch(logout());
+    const deletedSession = await deleteSession({localId});
+    console.log(deletedSession);
+  }
   
   return(
     <View style={stylesHeaderAlter.container}>
-      <Text style={width < DisplaySizes.minWidth ? stylesHeaderAlter.titleMin : stylesHeaderAlter.title}>
-        {title}
-      </Text>
+      <View style={stylesHeaderAlter.row}>
+        <View style={stylesHeaderAlter.sideColumn}>
+
+        </View>
+        <View style={stylesHeaderAlter.midColumn}>
+          <View style={stylesHeaderAlter.title}>
+            <Text style={width < DisplaySizes.minWidth ? stylesHeaderAlter.titleTextMin : stylesHeaderAlter.titleText}>
+              {title}
+            </Text>
+          </View>
+        </View>
+        <View style={stylesHeaderAlter.sideColumn}>
+          { !isLogedIn ? 
+            <></> :
+            <Pressable onPress={doLogout}>
+              <Image source={iconLogout} style={width < DisplaySizes.minWidth ? stylesHeaderAlter.iconMin : stylesHeaderAlter.icon} />
+            </Pressable>
+          }
+        </View>
+      </View>
     </View>
   );
 }
     
 const stylesHeaderAlter = StyleSheet.create({
   container: {
-    flex: 0,
-    flexDirection: 'column',
-    alignItems: 'top',
-    padding: 5,
-    borderTopColor: Colors.grayLight,
-    borderTopWidth: 1,
-    borderBottomColor: Colors.grayLight,
-    borderBottomWidth: 1,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: Colors.blueMain,
   },
-  title: {
-    marginBottom: 10,
-    textAlign: 'center',
-    fontSize: 24,
-    fontFamily: 'JosefinBold',
-    color: Colors.black
+  row: {
+    flexDirection: 'row',
   },
-  titleMin: {
-    marginBottom: 8,
-    textAlign: 'center',
-    fontSize: 20,
-    fontFamily: 'JosefinBold',
-    color: Colors.black
-  }
+  sideColumn: {
+    width: '10%',
+    justifyContent: 'center',
+  },
+  midColumn: {
+    width: '80%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  title: {
+    height: 54,
+    justifyContent: 'center',
+  },
+  titleText: {
+    fontSize: 28,
+    fontFamily: 'Lobster'
+  },
+  titleTextMin: {
+    fontSize: 24,
+    fontFamily: 'Lobster'
+  },
+  icon: {
+    width: 30,
+    height: 30
+  },
+  iconMin: {
+    width: 26,
+    height: 26
+  },
 });
 
 export default HeaderAlter;

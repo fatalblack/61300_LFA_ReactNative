@@ -32,8 +32,17 @@ export const authSlice = createSlice({
         profileLocation: action.payload
       };
     },
+    logout: (state) => {
+      state.value = {
+        user: null,
+        token: null,
+        localId: null,
+        profilePicture: null,
+        profileLocation: null
+      }
+    }
   }
 });
 
-export const { setUser, clearUser, setProfilePicture, setProfileLocation } = authSlice.actions;
+export const { setUser, clearUser, setProfilePicture, setProfileLocation, logout } = authSlice.actions;
 export default authSlice.reducer;

@@ -4,16 +4,26 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../globals/styles/Colors';
 import { DisplaySizes } from '../globals/styles/DisplaySizes';
 import { setShowMenu } from '../features/shop/shopSlice';
+import { logout } from '../features/auth/authSlice';
+import { deleteSession } from '../db';
 import CategoryList from './categories/CategoryList';
 import iconBars from '../../assets/icon-bars.png';
+import iconLogout from '../../assets/icon-logout.png';
 
 function Header({navigation}) {
   const dispatch = useDispatch();
   const showMenu = useSelector(state => state.shopReducer.value.showMenu);
+  const { localId } = useSelector(state => state.authReducer.value);
   const { height, width } = useWindowDimensions();
   
   const visibleListTrigger = () => {
     dispatch(setShowMenu(!showMenu));
+  }
+
+  const doLogout = async () => {
+    dispatch(logout());
+    const deletedSession = await deleteSession({localId});
+    console.log(deletedSession);
   }
 
   return(
@@ -30,7 +40,9 @@ function Header({navigation}) {
           </View>
         </View>
         <View style={stylesHeader.sideColumn}>
-
+          <Pressable onPress={doLogout}>
+            <Image source={iconLogout} style={width < DisplaySizes.minWidth ? stylesHeader.iconMin : stylesHeader.icon} />
+          </Pressable>
         </View>
       </View>
       {

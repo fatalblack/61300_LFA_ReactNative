@@ -1,11 +1,12 @@
 import { StyleSheet, Pressable, View, Text, useWindowDimensions } from 'react-native';
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes } from '../../globals/styles/DisplaySizes';
 import { useLoginMutation } from '../../services/authService';
 import { setUser } from '../../features/auth/authSlice';
 import { signinSchema } from '../../validations/signinSchema';
+import { insertSession } from '../../db';
 import InputForm from '../forms/InputForm';
 
 function Login({navigation}) {
@@ -20,6 +21,13 @@ function Login({navigation}) {
   useEffect(()=>{
     if(result.data){
       dispatch(setUser({email: result.data.email, idToken: result.data.idToken, localId: result.data.localId}));
+      insertSession({
+        email: result.data.email,
+        localId: result.data.localId,
+        token: result.data.idToken
+      })
+      .then(result => console.log('ok', result))
+      .catch(error => console.log('err', error.message));
     }
   }, [result]);
 
