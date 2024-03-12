@@ -48,10 +48,10 @@ export const shopSlice = createSlice({
       let quantity = action.payload.quantity;
       let productAlreadyAdded = state.value.cartItems.find(p => p.productId === product.id);
 
-      if(productAlreadyAdded){
-        productAlreadyAdded.quantity = productAlreadyAdded.quantity + quantity;
+      if(productAlreadyAdded && quantity > 0){
+        productAlreadyAdded.quantity = quantity;
         productAlreadyAdded.subTotal = product.price * productAlreadyAdded.quantity;
-      }else{
+      }else if(!productAlreadyAdded && quantity > 0){
         let productToAdd = {
           id: state.value.currentCartIndex,
           productId: product.id,
@@ -62,6 +62,8 @@ export const shopSlice = createSlice({
   
         state.value.cartItems = [...state.value.cartItems, productToAdd];
         state.value.currentCartIndex++;
+      } else if (productAlreadyAdded && quantity === 0) {
+        state.value.cartItems = state.value.cartItems.filter((item) => item.id !== productAlreadyAdded.id);
       }
       
       calculateTotal(state);
@@ -69,7 +71,7 @@ export const shopSlice = createSlice({
       Toast.show({
         type: 'success',
         text1: '¡Éxito!',
-        text2: `Se agregó el producto ${product.title}`
+        text2: `Se modificó el producto ${product.title} en el carrito.`
       });
     },
     setShowMenu: (state, action) => {

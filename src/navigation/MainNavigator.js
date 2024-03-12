@@ -19,8 +19,7 @@ const MainNavigator = () => {
         const session = await fetchSession({localId});
   
         if (session?.rows.length) {
-          const user = session.rows._array[0];
-          dispatch(setUser(user));
+          dispatch(setUser(session.rows._array[0]));
         }
       } catch (error) {
         Toast.show({

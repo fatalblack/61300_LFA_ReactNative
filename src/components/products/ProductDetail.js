@@ -1,13 +1,12 @@
 import { StyleSheet, Text, View, Image, Pressable, useWindowDimensions, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { DisplaySizes, IsUnderMinWidth, IsLandscape } from '../../globals/styles/DisplaySizes';
-import { addCartItem } from '../../features/shop/shopSlice';
 import { useGetProductByIdQuery } from '../../services/shopService';
+import ProductAddInput from './ProductAddInput';
 
 function ProductDetail({navigation}) {
-  const dispatch = useDispatch();
   const { height, width } = useWindowDimensions();
   const [ imageHeight, setImageHeight ] = useState(0);
   const [ imageWidth, setImageWidth ] = useState(0);
@@ -33,10 +32,6 @@ function ProductDetail({navigation}) {
       setItem(Object.values(product)[0]);
     }
   }, [product]);
-
-  const onAddProduct = () => {
-    dispatch(addCartItem({product: item, quantity: 1}));
-  };
 
   const onBackToList = () => {
     navigation.navigate("ProductList", {categoryId: item.categoryId});
@@ -71,11 +66,9 @@ function ProductDetail({navigation}) {
             <Text style={[stylesProductDetail.textPrice, isUnderMinWidth ? stylesProductDetail.textPriceMin : stylesProductDetail.textPriceMax]}>
               ${item.price}
             </Text>
-            <Pressable onPress={onAddProduct} style={stylesProductDetail.buyButton}>
-              <Text style={isUnderMinWidth ? stylesProductDetail.buyTextMin : stylesProductDetail.buyText}>
-                Comprar
-              </Text>
-            </Pressable>
+            <View style={stylesProductDetail.buyContainer}>
+              <ProductAddInput item={item} />
+            </View>
           </View>
         </View>
       </View>
@@ -170,22 +163,14 @@ const stylesProductDetail = StyleSheet.create({
     lineHeight: 40,
     fontSize: 22,
   },
-  buyButton: {
-    height: 40,
-    padding: 5,
-    margin: 10,
-    borderRadius: 3,
-    backgroundColor: Colors.pinkMain,
-    alignSelf: 'flex-start'
-  },
-  buyText: {
-    fontWeight: '600',
-    fontSize: 24,
-  },
-  buyTextMin: {
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
+  buyContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    width: 80,
+    alignSelf: 'center'
+  }
 });
 
 export default ProductDetail;

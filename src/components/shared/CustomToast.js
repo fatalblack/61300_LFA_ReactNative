@@ -50,10 +50,10 @@ const stylesCustomToast = StyleSheet.create({
     borderLeftColor: Colors.blueToast,
   },
   text1: {
-    fontSize: 14
+    fontSize: 16
   },
   text2: {
-    fontSize: 12
+    fontSize: 14
   },
 });
 

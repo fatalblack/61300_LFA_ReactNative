@@ -2,17 +2,13 @@ import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Colors } from '../../globals/styles/Colors';
 import { IsUnderMinWidth } from '../../globals/styles/DisplaySizes';
-import { setProductIdSelected, addCartItem } from '../../features/shop/shopSlice';
-import iconAdd from '../../../assets/icon-add.png';
+import { setProductIdSelected } from '../../features/shop/shopSlice';
+import ProductAddInput from './ProductAddInput';
 import iconDetail from '../../../assets/icon-detail.png';
 
 function ProductRow({navigation, item}) {
   const dispatch = useDispatch();
   const isUnderMinWidth = IsUnderMinWidth();
-
-  const onAddProduct = () => {
-    dispatch(addCartItem({product: item, quantity: 1}));
-  };
 
   const onViewDetail = () => {
     dispatch(setProductIdSelected(item.id));
@@ -36,9 +32,7 @@ function ProductRow({navigation, item}) {
         <Pressable onPress={onViewDetail}>
           <Image source={iconDetail} style={isUnderMinWidth ? stylesProductRow.iconMin : stylesProductRow.icon} />
         </Pressable>
-        <Pressable onPress={onAddProduct}>
-          <Image source={iconAdd} style={isUnderMinWidth ? stylesProductRow.iconMin : stylesProductRow.icon} />
-        </Pressable>
+        <ProductAddInput item={item} />
       </View>
     </View>
   );
@@ -82,8 +76,8 @@ const stylesProductRow = StyleSheet.create({
   colActions: {
     width: '20%',
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around'
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
   },
   icon: {
     width: 24,

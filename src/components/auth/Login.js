@@ -7,7 +7,7 @@ import { DisplaySizes, IsUnderMinWidth } from '../../globals/styles/DisplaySizes
 import { useLoginMutation } from '../../services/authService';
 import { setUser } from '../../features/auth/authSlice';
 import { signinSchema } from '../../validations/signinSchema';
-import { insertSession } from '../../db';
+import { insertSession, deleteSession } from '../../db';
 import InputForm from '../forms/InputForm';
 
 function Login({navigation}) {
@@ -23,6 +23,9 @@ function Login({navigation}) {
   useEffect(()=>{
     if(result.data){
       dispatch(setUser({email: result.data.email, idToken: result.data.idToken, localId: result.data.localId}));
+      
+      deleteSession({localId: result.data.localId});
+
       insertSession({
         email: result.data.email,
         localId: result.data.localId,
