@@ -49,6 +49,21 @@ export const fetchSession = ({localId}) => {
   return promise;
 }
 
+export const fetchSessionNoLocalId = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM sessions',
+        [],
+        (_, result) => resolve(result),
+        (_, error) => reject(error),
+      );
+    })
+  });
+
+  return promise;
+}
+
 export const deleteSession = ({localId}) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {

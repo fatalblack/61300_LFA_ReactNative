@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Toast from 'react-native-toast-message';
 import { useGetProfileImageQuery } from '../services/shopService';
 import { setProfilePicture, setUser } from '../features/auth/authSlice';
-import { fetchSession } from '../db';
+import { fetchSession, fetchSessionNoLocalId } from '../db';
 import AuthNavigator from './AuthNavigator';
 import TabNavigator from './TabNavigator';
 
@@ -16,10 +16,11 @@ const MainNavigator = () => {
   useEffect(() => {
     (async () => {
       try {
-        const session = await fetchSession({localId});
+        const session = await fetchSessionNoLocalId();
   
         if (session?.rows.length) {
-          dispatch(setUser(session.rows._array[0]));
+          let row = session.rows._array[0];
+          dispatch(setUser({email: row.email, localId: row.localId, idToken: row.token}));
         }
       } catch (error) {
         Toast.show({
